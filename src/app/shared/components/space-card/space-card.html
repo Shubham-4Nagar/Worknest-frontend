@@ -1,0 +1,26 @@
+<div class="space-card">
+
+  <img class="space-image"
+  [src]="space.image_url || 'https://via.placeholder.com/400X300'"
+  alt="space-image"
+  />
+
+  <div class="space-content">
+    <div class="space-title">
+      {{space.space_name}}
+    </div>
+
+    <div class=" space-location">
+      {{space.location}}
+    </div>
+
+    <div class="space-capacity">
+      Capacity: {{space.max_capacity}} people 
+    </div>
+
+    <button class="space-btn" (click)="onBook()">
+      Book Now
+    </button>
+    
+  </div>
+</div>

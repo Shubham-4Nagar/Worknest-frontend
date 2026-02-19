@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg custom-navbar px-4">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold logo" routerLink="/"> WorkNest </a>
+
+    <!-- Navigation Links -->
+    <div class="d-flex gap-4 align-items-center ms-4">
+      <a
+        *ngFor="let link of navLinks"
+        [routerLink]="link.path"
+        routerLinkActive="active-link"
+        class="nav-link-custom"
+      >
+        {{ link.label }}
+      </a>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrapper ms-auto d-none d-md-block">
+      <input
+        type="text"
+        class="form-control search-input"
+        placeholder="Search spaces..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+      />
+    </div>
+
+    <!-- Right Side -->
+    <div class="d-flex align-items-center gap-3 ms-3">
+      <div class="icon-btn">
+        <i class="bi bi-bell"></i>
+      </div>
+
+      <div class="avatar">S</div>
+    </div>
+  </div>
+</nav>

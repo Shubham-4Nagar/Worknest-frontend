@@ -1,0 +1,25 @@
+<!-- Hero Section -->
+<section class="hero-section text-center py-5">
+  <div class="container">
+    <h1 class="display-5 fw-bold">
+      Find Your Perfect Workspace
+    </h1>
+    <p class="text-muted-custom mt-3">
+      Discover premium co-working spaces across India.
+    </p>
+  </div>
+</section>
+
+<!-- Spaces Section -->
+<section class="container mt-4">
+  <h4 class="mb-4">Trending Spaces</h4>
+
+  <div class="row g-4">
+    <div class="col-md-4" *ngFor="let space of spaces">
+      <app-space-card
+        [space]="space"
+        (book)="onBook($event)">
+      </app-space-card>
+    </div>
+  </div>
+</section>

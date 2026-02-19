@@ -1,0 +1,47 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4 fw-semibold">Owner Dashboard</h2>
+
+  <div *ngIf="loading" class="text-center py-5">
+    Loading dashboard...
+  </div>
+
+  <div *ngIf="!loading && dashboardData">
+
+    <div class="row g-4">
+
+      <div class="col-md-3">
+        <div class="dashboard-card">
+          <h6>Total Spaces</h6>
+          <h3>{{ dashboardData.total_spaces }}</h3>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="dashboard-card">
+          <h6>Total Bookings</h6>
+          <h3>{{ dashboardData.total_bookings }}</h3>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="dashboard-card">
+          <h6>Pending Bookings</h6>
+          <h3>{{ dashboardData.pending_bookings }}</h3>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="dashboard-card">
+          <h6>Total Earnings</h6>
+          <h3>
+            {{ dashboardData.total_earning | currency:'INR':'symbol':'1.0-0' }}
+          </h3>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
