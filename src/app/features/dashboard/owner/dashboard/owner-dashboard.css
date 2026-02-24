@@ -1,0 +1,50 @@
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.space-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.space-card:hover {
+  transform: translateY(-3px);
+}
+
+.space-card h3 {
+  margin-bottom: 10px;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: #2563eb;
+  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.card-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.card-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.card-actions .danger {
+  background-color: #dc2626;
+  color: white;
+}

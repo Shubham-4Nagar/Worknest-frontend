@@ -1,47 +1,27 @@
-<div class="container mt-4">
+<h2>Your Spaces</h2>
 
-  <h2 class="mb-4 fw-semibold">Owner Dashboard</h2>
+<div *ngIf="isLoading" class="loading">
+  Loading Spaces...
+</div>
 
-  <div *ngIf="loading" class="text-center py-5">
-    Loading dashboard...
-  </div>
+<div *ngIf="!isLoading && spaces.length === 0" class="empty">
+  No spaces created yet.
+</div>
 
-  <div *ngIf="!loading && dashboardData">
+<div class="cards-container" *ngIf="!isLoading && spaces.length > 0">
+  <div class="space-card" *ngFor="let space of spaces">
+    <h3>{{ space.space_name }}</h3>
 
-    <div class="row g-4">
+    <p><strong> Location:</strong> {{ space.location }}</p>
+    <p><strong> Capacity:</strong> {{ space.max_capacity }}</p>
 
-      <div class="col-md-3">
-        <div class="dashboard-card">
-          <h6>Total Spaces</h6>
-          <h3>{{ dashboardData.total_spaces }}</h3>
-        </div>
-      </div>
+    <span class="badge">
+      {{ space.space_type }}
+    </span>
 
-      <div class="col-md-3">
-        <div class="dashboard-card">
-          <h6>Total Bookings</h6>
-          <h3>{{ dashboardData.total_bookings }}</h3>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="dashboard-card">
-          <h6>Pending Bookings</h6>
-          <h3>{{ dashboardData.pending_bookings }}</h3>
-        </div>
-      </div>
-
-      <div class="col-md-3">
-        <div class="dashboard-card">
-          <h6>Total Earnings</h6>
-          <h3>
-            {{ dashboardData.total_earning | currency:'INR':'symbol':'1.0-0' }}
-          </h3>
-        </div>
-      </div>
-
+    <div class="card-actions">
+      <button [routerLink]="['/dashboard/owner/edit-space', space.space_id]">Edit</button>
+      <button class="danger" (click)="deleteSpace(space.space_id)">Delete</button>
     </div>
-
   </div>
-
 </div>

@@ -1,1 +1,27 @@
-<p>dashboard-layout works!</p>
+<div class="dashboard-container">
+  <aside class="sidebar">
+  <h3>Owner Panel</h3>
+
+  <ul>
+    <li routerLink="/dashboard/owner/spaces" routerLinkActive="active">
+      Your Spaces
+    </li>
+
+    <li routerLink="/dashboard/owner/add-space" routerLinkActive="active">
+      Add Space
+    </li>
+
+    <li routerLink="/dashboard/owner/bookings" routerLinkActive="active">
+      Bookings
+    </li>
+
+    <li routerLink="/dashboard/owner/earnings" routerLinkActive="active">
+      Earnings
+    </li>
+  </ul>
+</aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

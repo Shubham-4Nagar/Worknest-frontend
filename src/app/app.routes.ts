@@ -1,24 +1,62 @@
-import { Routes } from '@angular/router';
-// import { authGuard } from './core/guards/auth.guard';
-// import { roleGuard } from './core/guards/role.guard';
+import { Routes } from "@angular/router";
+import { roleGuard } from "./core/guards/role.guard";
 
-export const routes: Routes = [
+export const routes:Routes =[
+  //Login
   {
-    path: 'login',
+    path:'login',
     loadComponent: () =>
-      import('./features/auth/login/login').then(m => m.Login)
+      import('./features/auth/login/login')
+    .then(m => m.Login)
   },
-//   {
-//     path: 'dashboard/admin',
-//     canActivate: [authGuard, roleGuard('Admin')],
-//     loadComponent: () =>
-//       import('./features/dashboard/admin/admin').then(m => m.Admin)
-//   },
-//   {
-//     path: 'dashboard/owner',
-//     canActivate: [authGuard, roleGuard('Owner')],
-//     loadComponent: () =>
-//       import('./features/dashboard/owner/owner').then(m => m.Owner)
-//   },
-  { path: '**', redirectTo: 'login' }
+  //Dashboard (Parent)
+  {
+    path:'dashboard',
+    loadComponent: () =>
+      import('./layouts/dashboard-layout/dashboard-layout')
+    .then(m => m.DashboardLayout),
+
+    children: [
+      //owner routes
+      {
+        path:'owner',
+        canActivate: [roleGuard('Owner')],
+        children: [
+          {
+            path:'',
+            redirectTo: 'spaces',
+            pathMatch: 'full'
+          },
+          {
+            path: 'spaces',
+            loadComponent: () =>
+              import('./features/dashboard/owner/dashboard/owner-dashboard')
+            .then(m => m.OwnerDashboard)
+          },
+          {
+            path:'add-space',
+            loadComponent: () =>
+              import('./features/dashboard/owner/add-space/add-space')
+            .then(m => m.AddSpace)
+          },
+          {
+            path:'edit-space/:id',
+            loadComponent: () =>
+              import('./features/dashboard/owner/edit-space/edit-space')
+            .then(m => m.EditSpace)
+          }
+        ]
+      }
+    ]
+  },
+  //Default
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    redirectTo: 'login'
+  }
 ];

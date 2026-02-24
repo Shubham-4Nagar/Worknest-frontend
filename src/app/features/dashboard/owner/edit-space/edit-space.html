@@ -1,0 +1,25 @@
+<h2>Edit Space</h2>
+
+<div *ngIf="isLoading">
+  Loading...
+</div>
+
+<div *ngIf="!isLoading">
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+    <label>Name</label>
+    <input formControlName="space_name">
+
+    <label>Location</label>
+    <input formControlName="location">
+
+    <label>Capacity</label>
+    <input type="number" formControlName="max_capacity">
+
+    <label>Type</label>
+    <input formControlName="space_type">
+
+    <button type="submit">Update Space</button>
+
+  </form>
+</div>

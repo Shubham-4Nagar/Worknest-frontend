@@ -1,0 +1,62 @@
+<div class="add-space-container">
+  <h2>Add New Space</h2>
+
+  <form [formGroup]="spaceForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-group">
+      <label>Space Name</label>
+      <input type="text" formControlName="space_name" />
+      <small *ngIf="submitted && spaceForm.get('space_name')?.invalid">
+        Space name is required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" formControlName="location" />
+      <small *ngIf="submitted && spaceForm.get('location')?.invalid">
+        Location is required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Maximum Capacity</label>
+      <input type="number" formControlName="max_capacity" />
+      <small *ngIf="submitted && spaceForm.get('max_capacity')?.invalid">
+        Valid capacity required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Space Type</label>
+      <select formControlName="space_type">
+        <option value="">Select Type</option>
+        <option *ngFor="let type of spaceTypes" [value]="type.value">
+          {{ type.label }}
+        </option>
+      </select>
+      <small *ngIf="submitted && spaceForm.get('space_type')?.invalid">
+        Space type is required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea formControlName="description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Image URL</label>
+      <input type="text" formControlName="image_url" />
+    </div>
+
+    <button type="submit" [disabled]="isLoading">
+      {{ isLoading ? 'Creating...' : 'Create Space' }}
+    </button>
+
+    <p class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+  </form>
+</div>

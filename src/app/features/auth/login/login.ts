@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NgIf } from '@angular/common';
@@ -12,34 +12,34 @@ import { finalize } from 'rxjs';
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-
 export class Login {
 
   errorMessage = '';
-  isLoading=false;
-  loginForm!: any;
+  isLoading = false;
+  loginForm!: FormGroup; 
   submitted = false;
 
   constructor(
-    private fb:FormBuilder,
+    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-  )
-  {
+  ) {
     this.loginForm = this.fb.group({
-    email:['',[Validators.email, Validators.required]],
-    password:['',[Validators.required]]
-  });}
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', [Validators.required]]
+    });
+  }
 
-  
   onSubmit() {
 
-    this.submitted = true;// when the user click submit then only error will be shown
+    if (this.isLoading) return;
 
-    if(this.loginForm.invalid) return;
+    this.submitted = true;
+
+    if (this.loginForm.invalid) return;
 
     this.isLoading = true;
-    this.errorMessage='';
+    this.errorMessage = '';
 
     this.authService.login(this.loginForm.value).pipe(
       finalize(() => this.isLoading = false)
@@ -47,8 +47,6 @@ export class Login {
     .subscribe({
       next: (res) => {
         this.authService.saveAuthData(res);
-        console.log('Login Success:', res);
-
         this.redirectByRole(res.role);
       },
       error: () => {
