@@ -2,12 +2,26 @@ import { Routes } from "@angular/router";
 import { roleGuard } from "./core/guards/role.guard";
 
 export const routes:Routes =[
+  //Landing Page
+  {
+    path:'',
+    loadComponent: () =>
+      import('./features/public/landing/landing')
+    .then(m => m.Landing)
+  },
   //Login
   {
     path:'login',
     loadComponent: () =>
       import('./features/auth/login/login')
     .then(m => m.Login)
+  },
+  //Register New User
+  {
+    path:'register',
+    loadComponent: () => 
+      import('./features/auth/register/register')
+    .then(m => m.Register)
   },
   //Dashboard (Parent)
   {
@@ -17,7 +31,7 @@ export const routes:Routes =[
     .then(m => m.DashboardLayout),
 
     children: [
-      //owner routes
+      //owner routes(Child)
       {
         path:'owner',
         canActivate: [roleGuard('Owner')],
@@ -44,19 +58,20 @@ export const routes:Routes =[
             loadComponent: () =>
               import('./features/dashboard/owner/edit-space/edit-space')
             .then(m => m.EditSpace)
+          },
+          {
+            path:'bookings',
+            loadComponent: () => 
+              import('./features/dashboard/owner/bookings/owner-bookings')
+            .then(m => m.OwnerBookings)
           }
         ]
       }
     ]
   },
-  //Default
-  {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },
+  
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: ''
   }
 ];

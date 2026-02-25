@@ -44,19 +44,23 @@
       <label>Description</label>
       <textarea formControlName="description"></textarea>
     </div>
+    <div>
+      <label>Upload Image</label>
+      <input type="file" accept="image/*" (change)="onFileSelected($event)">
 
-    <div class="form-group">
-      <label>Image URL</label>
-      <input type="text" formControlName="image_url" />
+      <button type="button" (click)="uploadImage()" [disabled]="!selectedFile">
+        Upload Image
+      </button>
+      <div *ngIf="imagePreview">
+        <img [src]="imagePreview"
+        width="200"
+        style="margin-top: 10px;">
+      </div>
     </div>
 
-    <button type="submit" [disabled]="isLoading">
-      {{ isLoading ? 'Creating...' : 'Create Space' }}
+    <button type="submit" [disabled]="spaceForm.invalid || !uploadImage || !isLoading">
+      Create Space
     </button>
-
-    <p class="error" *ngIf="errorMessage">
-      {{ errorMessage }}
-    </p>
 
   </form>
 </div>

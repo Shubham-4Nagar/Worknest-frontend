@@ -1,0 +1,90 @@
+<h2 class="page-title">Bookings</h2>
+
+<!-- Status Tabs -->
+<div class="tabs">
+
+  <button
+    [class.active]="activeStatus === 'pending'"
+    (click)="changeStatus('pending')">
+    Pending ({{ getCount('pending') }})
+  </button>
+
+  <button
+    [class.active]="activeStatus === 'confirmed'"
+    (click)="changeStatus('confirmed')">
+    Confirmed ({{ getCount('confirmed') }})
+  </button>
+
+  <button
+    [class.active]="activeStatus === 'cancelled'"
+    (click)="changeStatus('cancelled')">
+    Cancelled ({{ getCount('cancelled') }})
+  </button>
+
+  <button
+    [class.active]="activeStatus === 'completed'"
+    (click)="changeStatus('completed')">
+    Completed ({{ getCount('completed') }})
+  </button>
+
+</div>
+
+<!-- Loading -->
+<div *ngIf="isLoading" class="loading">
+  Loading bookings...
+</div>
+
+<!-- Empty State -->
+<div *ngIf="!isLoading && filteredBookings.length === 0"
+     class="empty-state">
+  <h3>No {{ activeStatus }} bookings</h3>
+  <p>Bookings will appear here.</p>
+</div>
+
+<!-- Booking Cards -->
+<div *ngFor="let booking of filteredBookings"
+     class="booking-card">
+
+  <div class="card-header">
+    <h3>{{ booking.space_name }}</h3>
+    <span class="status-badge">
+      {{ booking.status }}
+    </span>
+  </div>
+
+  <div class="card-body">
+    <p><strong>User:</strong> {{ booking.user_name }}</p>
+    <p><strong>Type:</strong> {{ booking.booking_type }}</p>
+
+    <p>
+      <strong>Duration:</strong>
+      {{ booking.start_date }}
+      →
+      {{ booking.end_date }}
+    </p>
+
+    <p><strong>People:</strong>
+      {{ booking.number_of_people }}
+    </p>
+
+    <p class="amount">
+      ₹ {{ booking.total_amount }}
+    </p>
+  </div>
+
+  <div class="actions"
+       *ngIf="booking.status === 'pending'">
+
+    <button class="approve"
+      (click)="updateStatus(booking.booking_id, 'confirmed')">
+      Approve
+    </button>
+
+    <button class="reject"
+      (click)="updateStatus(booking.booking_id, 'cancelled')">
+      Reject
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,17 @@
+<h2 class="page-title">Earnings</h2>
+
+<div *ngIf="isLoading" class="text-muted">Loading Earnings...</div>
+
+<div *ngIf="!isLoading">
+  <div class="card shadow-sm earning-card">
+    <div class="card-body text-center">
+      <h5 class="card-title text-muted">Total Earnings</h5>
+      <h1 class="display-5 fw-bold text-success">
+      {{ totalEarnings | currency:'INR':'symbol':'1.2.2':'en-IN'}}
+      </h1>
+      <p *ngIf="totalEarnings === 0" class="text-muted mt-3">
+        No completed payments or bookings yet.
+      </p>
+    </div>
+  </div>
+</div>

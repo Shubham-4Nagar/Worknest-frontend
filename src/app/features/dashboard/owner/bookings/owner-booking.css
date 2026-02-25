@@ -1,0 +1,107 @@
+.page-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.tabs button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #e5e7eb;
+  font-weight: 500;
+}
+
+.tabs button.active {
+  background: #2563eb;
+  color: white;
+}
+
+.tabs button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading {
+  font-size: 16px;
+  padding: 20px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  color: #6b7280;
+}
+
+.booking-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.status-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+.status-badge.pending {
+  background: #facc15;
+  color: #92400e;
+}
+
+.card-body p {
+  margin: 6px 0;
+}
+
+.amount {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.actions .approve {
+  background: #16a34a;
+  color: white;
+}
+
+.actions .reject {
+  background: #dc2626;
+  color: white;
+}
