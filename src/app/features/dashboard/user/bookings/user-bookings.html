@@ -1,0 +1,56 @@
+<div class="container">
+
+  <h2>My Bookings</h2>
+
+
+  <!-- Create Booking -->
+  <div *ngIf="spaceId" class="booking-form">
+
+    <h3>Create Booking</h3>
+
+    <label>Select Date</label>
+
+    <input
+      type="date"
+      [(ngModel)]="bookingDate"
+    >
+
+    <button
+      (click)="createBooking()"
+      [disabled]="isCreating"
+    >
+      Confirm Booking
+    </button>
+
+  </div>
+
+
+  <p class="message">{{ message }}</p>
+
+
+  <!-- Loading -->
+  <div *ngIf="isLoading">
+    Loading bookings...
+  </div>
+
+
+  <!-- Booking list -->
+  <div *ngIf="!isLoading">
+
+    <div *ngFor="let booking of bookings" class="card">
+
+      <h4>{{ booking.space_name }}</h4>
+
+      <p>Date: {{ booking.booking_date }}</p>
+
+      <p>Status:
+        <span class="status">
+          {{ booking.status }}
+        </span>
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

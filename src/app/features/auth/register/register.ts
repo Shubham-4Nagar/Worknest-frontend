@@ -15,7 +15,8 @@ export class Register {
 
   registerForm!: FormGroup;
   errorMessage = "";
-  baseUrl = "http://127.0.0.1:5000/users";
+  successMessage ="";
+  private apiUrl = "http://127.0.0.1:5000/users/register";
 
   constructor(
     private fb: FormBuilder,
@@ -33,14 +34,25 @@ export class Register {
   onSubmit() {
     if (this.registerForm.invalid) return;
 
-    this.http.post(`${this.baseUrl}/register`, this.registerForm.value)
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
-          this.errorMessage = err.error?.error || "Registration failed";
-        }
-      });
+    const payload = this.registerForm.value;
+
+    console.log("Sending payload:", payload);
+
+    this.http.post<any>(this.apiUrl, payload).subscribe({
+
+      next:(response) => {
+        this.successMessage = response.message;
+        this.errorMessage = "";
+
+        setTimeout (()=> {
+          this.router.navigate(["/login"]);
+        },1500);
+      },
+      error: (error) => {
+        this.errorMessage = error.error?.error || "Registration failed";
+      
+        this.successMessage="";
+      }
+    });
   }
 }

@@ -10,8 +10,10 @@ export const roleGuard = (expectedRole: string): CanActivateFn =>{
         console.log("Stored role:", authService.getRole());
         console.log("Expected role:", expectedRole);
 
-        if(authService.getRole() === expectedRole) return true;
-        
+        if(authService.getRole() === expectedRole) {
+            
+            return true;
+        }
         router.navigate(['/login']);
         return false
     };

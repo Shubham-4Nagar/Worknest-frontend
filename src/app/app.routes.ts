@@ -64,12 +64,42 @@ export const routes:Routes =[
             loadComponent: () => 
               import('./features/dashboard/owner/bookings/owner-bookings')
             .then(m => m.OwnerBookings)
+          },
+          {
+            path:'earnings',
+            loadComponent: () => 
+              import('./features/dashboard/owner/total-earning/owner-earnings')
+            .then(m => m.OwnerEarnings)
           }
+        ]
+      },
+      //USER ROUTES
+      {
+        path: 'user',
+        canActivate: [roleGuard('User')],
+        children: [
+          {
+            path:'',
+            loadComponent: ()=>
+              import('./features/dashboard/user/dashboard/user-dashboard')
+            .then(m => m.UserDashboard)
+          },
+          {
+            path:'browse',
+            loadComponent: () => 
+              import('./features/dashboard/user/browse-spaces/browse-spaces')
+            .then(m =>m.BrowseSpaces)
+          },
+          {
+            path: 'bookings',
+            loadComponent: () =>
+              import('./features/dashboard/user/bookings/user-bookings')
+                .then(m => m.UserBookings)
+          },
         ]
       }
     ]
   },
-  
   {
     path: '**',
     redirectTo: ''

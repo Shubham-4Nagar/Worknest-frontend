@@ -57,7 +57,6 @@ export class BookingService {
       { headers: this.getAuthHeaders() }
     );
   }
-
   //OWNER ROUTES
 
   getOwnerBookings(): Observable<OwnerBooking[]> {

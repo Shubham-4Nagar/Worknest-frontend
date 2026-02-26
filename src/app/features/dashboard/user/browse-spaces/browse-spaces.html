@@ -1,0 +1,36 @@
+<div class="container">
+
+  <h2>Browse Spaces</h2>
+  <div class="filter-bar">
+    <label>Filter by Type:</label>
+    <select [(ngModel)]="selectedType" (change)="filterSpaces()">
+      <option value="">All</option>
+      <option value="private_cabin">Private Cabin</option>
+      <option value="meeting_room">Meeting Room</option>
+      <option value="open_desk">Open Desk</option>
+      <option value="event_space">Event Space</option>
+    </select>
+  </div>
+  <div *ngIf="isLoading">
+    Loading spaces...
+  </div>
+
+  <!-- SPACE CARDS -->
+  <div class="grid">
+    <div class="card" *ngFor="let space of filteredSpaces">
+      <img
+        [src]="space.image_url || 'assets/default-space.jpg'"
+        class="image"
+      >
+      <div class="card-body">
+        <h3>{{ space.space_name }}</h3>
+        <p> {{ space.location }}</p>
+        <p> {{ space.space_type }}</p>
+        <p> Capacity: {{ space.max_capacity }}</p>
+        <button (click)="bookSpace(space.space_id)">
+          Book Space
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

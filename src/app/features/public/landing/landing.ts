@@ -5,7 +5,7 @@ import { NgFor } from "@angular/common";
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink, NgFor],
+  imports: [RouterLink],
   templateUrl: './landing.html',
   styleUrl: './landing.css'
 })
