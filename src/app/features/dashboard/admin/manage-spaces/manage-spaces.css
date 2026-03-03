@@ -1,0 +1,86 @@
+.page {
+  padding: 10px 0;
+}
+
+h2 {
+  margin-bottom: 25px;
+  color: #0c4a6e;
+}
+
+.loading,
+.empty {
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15);
+}
+
+.table-wrapper {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 12px;
+  color: #0ea5e9;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.approve {
+  background: #38bdf8;
+  color: white;
+}
+
+.approve:hover {
+  background: #0ea5e9;
+}
+
+.reject {
+  background: #f87171;
+  color: white;
+}
+
+.reject:hover {
+  background: #ef4444;
+}

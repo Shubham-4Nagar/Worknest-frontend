@@ -31,6 +31,43 @@ export const routes:Routes =[
     .then(m => m.DashboardLayout),
 
     children: [
+      //ADMIN Routes
+      {
+        path:'admin',
+        canActivate: [roleGuard('Admin')],
+        children: [
+          {
+            path:'',
+            loadComponent: () => 
+              import('./features/dashboard/admin/dashboard/admin-dashboard')
+            .then(m => m.AdminDashboard)
+          },
+          {
+            path:'owner-requests',
+            loadComponent: () => 
+              import('./features/dashboard/admin/owner-requests/owner-requests')
+            .then(m => m.OwnerRequests)
+          },
+          {
+            path:'spaces',
+            loadComponent: () => 
+              import('./features/dashboard/admin/manage-spaces/manage-spaces')
+            .then(m => m.ManageSpaces)
+          },
+          {
+            path:'users',
+            loadComponent: () =>
+              import('./features/dashboard/admin/users/users')
+            .then(m => m.Users)
+          },
+          {
+            path:'bookings',
+            loadComponent: () => 
+              import('./features/dashboard/admin/bookings/bookings')
+            .then(m => m.Bookings)
+          }
+        ]
+      },
       //owner routes(Child)
       {
         path:'owner',
@@ -96,6 +133,13 @@ export const routes:Routes =[
               import('./features/dashboard/user/bookings/user-bookings')
                 .then(m => m.UserBookings)
           },
+          {
+            path:'request-owner',
+            loadComponent: () => 
+              import('./features/dashboard/user/request-owner/request-owner')
+            .then(m => m.RequestOwner)
+          }
+          
         ]
       }
     ]

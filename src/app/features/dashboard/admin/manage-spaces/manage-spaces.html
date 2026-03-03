@@ -1,0 +1,56 @@
+<div class="page">
+
+  <h2>Manage Spaces</h2>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Loading spaces...
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && spaces.length === 0" class="empty">
+    No pending spaces.
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading && spaces.length > 0" class="table-wrapper">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Space Name</th>
+          <th>Location</th>
+          <th>Owner ID</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let space of spaces">
+          <td>{{ space.space_name }}</td>
+          <td>{{ space.location }}</td>
+          <td>{{ space.owner_id }}</td>
+
+          <td>
+            <span class="badge pending">Pending</span>
+          </td>
+
+          <td class="actions">
+            <button class="approve"
+              (click)="updateSpace(space.space_id, 'active')">
+              Approve
+            </button>
+
+            <button class="reject"
+              (click)="updateSpace(space.space_id, 'inactive')">
+              Deactivate
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

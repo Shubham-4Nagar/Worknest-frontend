@@ -1,0 +1,50 @@
+<div class="page">
+
+  <h2>Owner Requests</h2>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Loading requests...
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && owners.length === 0" class="empty">
+    No pending owner requests.
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading && owners.length > 0" class="table-wrapper">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Requested At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let owner of owners">
+          <td>{{ owner.name }}</td>
+          <td>{{ owner.email }}</td>
+          <td>{{ owner.created_at | date:'medium' }}</td>
+          <td class="actions">
+            <button class="approve"
+              (click)="updateOwnerStatus(owner.user_id, 'approved')">
+              Approve
+            </button>
+
+            <button class="reject"
+              (click)="updateOwnerStatus(owner.user_id, 'rejected')">
+              Reject
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

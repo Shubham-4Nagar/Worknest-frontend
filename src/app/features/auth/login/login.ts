@@ -47,6 +47,9 @@ export class Login {
     .subscribe({
       next: (res) => {
         this.authService.saveAuthData(res);
+        if(res.role === 'Owner'){
+          localStorage.setItem('ownerApproved', 'true');
+        }
         this.redirectByRole(res.role);
       },
       error: () => {

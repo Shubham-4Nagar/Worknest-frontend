@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink,RouterOutlet, RouterLinkActive } from '@angular/router';
+import { RouterLink,RouterOutlet, RouterLinkActive, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -13,9 +13,14 @@ export class DashboardLayout {
 
   role='';
 
-  constructor(private authService: AuthService){
+  constructor(private authService: AuthService,
+              private router: Router){
     
     this.role = this.authService.getRole() || '';
+  }
+  logout(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }

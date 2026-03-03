@@ -27,7 +27,7 @@ export class BookingService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem('token');
     return new HttpHeaders({
       Authorization: `Bearer ${token}`
     });

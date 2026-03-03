@@ -1,17 +1,22 @@
 .dashboard-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  background: #f0f9ff;
 }
 
+/* SIDEBAR */
 .sidebar {
-  width: 220px;
-  background-color: #0f172a;
+  width: 240px;
+  background: #38bdf8;
+  padding: 30px 20px;
   color: white;
-  padding: 20px;
 }
 
 .sidebar h3 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .sidebar ul {
@@ -20,22 +25,57 @@
 }
 
 .sidebar li {
-  padding: 10px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
   cursor: pointer;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  transition: 0.3s ease;
+  font-weight: 500;
+}
+/*TOPBAR*/
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.topbar{
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 30px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
 }
 
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover{
+  background: #dc2626;
+}
+
+/* Hover */
 .sidebar li:hover {
-  background-color: #1e293b;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
 }
 
+/* Active */
 .sidebar .active {
-  background-color: #2563eb;
+  background: white;
+  color: #0ea5e9;
+  font-weight: 600;
 }
 
+/* CONTENT AREA */
 .content {
   flex: 1;
-  padding: 30px;
-  background-color: #f1f5f9;
+  padding: 40px;
+  background: #f0f9ff;
 }

@@ -1,0 +1,38 @@
+<div class="container">
+
+  <h2>Request Owner Access</h2>
+
+  <div class="card">
+
+    <label>Select ID Proof (PDF, JPG, PNG)</label>
+
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      accept=".pdf,.jpg,.jpeg,.png"
+    >
+
+    <button
+      (click)="uploadFile()"
+      [disabled]="isUploading"
+    >
+      {{ isUploading ? 'Uploading...' : 'Upload Document' }}
+    </button>
+
+    <div *ngIf="uploadedFileUrl" class="success">
+      Document uploaded successfully
+    </div>
+
+    <button
+      class="submit-btn"
+      (click)="submitRequest()"
+      [disabled]="!uploadedFileUrl || isSubmitting"
+    >
+      {{ isSubmitting ? 'Submitting...' : 'Submit Owner Request' }}
+    </button>
+
+    <p class="message">{{ message }}</p>
+
+  </div>
+
+</div>

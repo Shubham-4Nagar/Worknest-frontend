@@ -1,4 +1,4 @@
-/* ================= GLOBAL ================= */
+/*  GLOBAL  */
 * {
   margin: 0;
   padding: 0;
@@ -123,7 +123,7 @@ body {
   transform: translateY(-4px);
 }
 
-/* ================= FEATURES ================= */
+/* FEATURES */
 .features {
   padding: 120px 8%;
   background: #f0f9ff;
@@ -154,7 +154,7 @@ body {
   box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
 }
 
-/* ================= SPACES ================= */
+/* SPACES */
 .spaces {
   padding: 120px 8%;
   background: #e0f2fe;
@@ -212,7 +212,7 @@ body {
   box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
 }
 
-/* ================= CTA ================= */
+/* CTA  */
 .bottom-cta {
   padding: 100px 8%;
   background: linear-gradient(135deg, #38bdf8, #0ea5e9);

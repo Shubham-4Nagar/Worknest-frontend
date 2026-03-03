@@ -57,6 +57,8 @@ export class AuthService {
   }
 
   logout() {
-    this.clearStorage();
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('ownerApproved');
   }
 }

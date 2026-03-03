@@ -19,6 +19,10 @@ export class OwnerDashboard implements OnInit {
 
     ngOnInit(){
         this.loadSpaces();
+        if(localStorage.getItem('ownerApproved')){
+            alert('Your owner Request has been approved!. Please Login-in Once Again');
+            localStorage.removeItem('ownerApproved');
+        }
     }
     loadSpaces(){
         this.spaceService.getOwnerSpaces().subscribe({
@@ -33,6 +37,7 @@ export class OwnerDashboard implements OnInit {
             }
         });
     }
+
     deleteSpace(spaceId: string){
         const confirmed = confirm("Are you sure you want to delete this space ?");
 

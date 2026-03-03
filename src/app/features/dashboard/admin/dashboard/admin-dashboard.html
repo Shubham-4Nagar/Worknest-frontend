@@ -1,1 +1,25 @@
-<p>dashboard works!</p>
+<h2>Admin Dashboard</h2>
+<div *ngIf="!isLoading"> Loading...</div>
+
+<div *ngIf="!isLoading" class="stats-container">
+    <div class="card">
+        <h3>Total Users</h3>
+        <p>{{stats?.total_users}}</p>
+    </div>
+    <div class="card">
+        <h3>Total Owners</h3>
+        <p>{{stats?.total_owners}}</p>
+    </div>
+    <div class="card">
+        <h3>Total Spaces</h3>
+        <p>{{stats?.total_spaces}}</p>
+    </div>
+    <div class="card">
+        <h3>Total Bookings</h3>
+        <p>{{stats?.total_bookings}}</p>
+    </div>
+    <div class="card revenue">
+        <h3>Total Revenue</h3>
+        <p>{{stats?.total_revenue|currency:'INR':'symbol':'1-0-2' }}</p>
+    </div>
+</div>

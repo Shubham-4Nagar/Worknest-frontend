@@ -1,65 +1,58 @@
 <div class="dashboard-container">
-
   <aside class="sidebar">
-
     <!-- USER SIDEBAR -->
     <ng-container *ngIf="role === 'User'">
-
       <h3>User Panel</h3>
       <ul>
-        <li routerLink="/dashboard/user" routerLinkActive="active">
-          Dashboard
-        </li>
+        <li routerLink="/dashboard/user" routerLinkActive="active">Dashboard</li>
 
-        <li routerLink="/dashboard/user/browse" routerLinkActive="active">
-          Browse Spaces
-        </li>
+        <li routerLink="/dashboard/user/browse" routerLinkActive="active">Browse Spaces</li>
 
-        <li routerLink="/dashboard/user/bookings" routerLinkActive="active">
-          My Bookings
-        </li>
+        <li routerLink="/dashboard/user/bookings" routerLinkActive="active">My Bookings</li>
 
-        <li routerLink="/dashboard/user/request-owner" routerLinkActive="active">
-          Become Owner
-        </li>
-
+        <li routerLink="/dashboard/user/request-owner" routerLinkActive="active">Become Owner</li>
       </ul>
-
     </ng-container>
-
 
     <!-- OWNER SIDEBAR -->
     <ng-container *ngIf="role === 'Owner'">
-
       <h3>Owner Panel</h3>
 
       <ul>
+        <li routerLink="/dashboard/owner/spaces" routerLinkActive="active">Your Spaces</li>
 
-        <li routerLink="/dashboard/owner/spaces" routerLinkActive="active">
-          Your Spaces
-        </li>
+        <li routerLink="/dashboard/owner/add-space" routerLinkActive="active">Add Space</li>
 
-        <li routerLink="/dashboard/owner/add-space" routerLinkActive="active">
-          Add Space
-        </li>
+        <li routerLink="/dashboard/owner/bookings" routerLinkActive="active">Bookings</li>
 
-        <li routerLink="/dashboard/owner/bookings" routerLinkActive="active">
-          Bookings
-        </li>
-
-        <li routerLink="/dashboard/owner/earnings" routerLinkActive="active">
-          Earnings
-        </li>
-
+        <li routerLink="/dashboard/owner/earnings" routerLinkActive="active">Earnings</li>
       </ul>
-
     </ng-container>
-
+    <!--ADMIN SIDEBAR-->
+    <ng-container *ngIf="role === 'Admin'">
+      <h3>Admin Panel</h3>
+      <ul>
+        <li routerLink="/dashboard/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</li>
+        <li routerLink="/dashboard/admin/owner-requests" routerLinkActive="active">
+          Owner Requests
+        </li>
+        <li routerLink="/dashboard/admin/spaces" routerLinkActive="active">Manage Spaces</li>
+        <li routerLink="/dashboard/admin/users" routerLinkActive="active">Total Users</li>
+        <li routerLink="/dashboard/admin/bookings" routerLinkActive="active">Total Bookings</li>
+        <li routerLink="/dashboard/admin/revenue" routerLinkActive="active">Total Revenue</li>
+      </ul>
+    </ng-container>
   </aside>
 
+  <div class="main-area">
+    <div class="topbar">
+      <button class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </div>
 
   <main class="content">
     <router-outlet></router-outlet>
   </main>
-
 </div>
