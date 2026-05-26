@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { SpaceService } from "../../../../core/services/space.service";
 import { NgIf, NgFor } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
+import { finalize } from "rxjs";
 
 @Component({
   selector: 'app-add-space',
@@ -17,7 +18,9 @@ export class AddSpace {
 
   spaceForm!: FormGroup;
   isLoading = false;
+  isUploading = false;
   errorMessage = '';
+  successMessage = '';
   submitted = false;
 
   selectedFile!: File;
@@ -53,6 +56,8 @@ export class AddSpace {
     if (!file) return;
 
     this.selectedFile = file;
+    this.errorMessage = '';
+    this.successMessage = '';
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -65,6 +70,9 @@ export class AddSpace {
   uploadImage() {
 
     if (!this.selectedFile) return;
+    this.isUploading = true;
+    this.errorMessage = '';
+    this.successMessage = '';
 
     const formData = new FormData();
     formData.append('file', this.selectedFile);
@@ -73,7 +81,7 @@ export class AddSpace {
     this.http.post<any>(
       'https://api.cloudinary.com/v1_1/ddjbb1yy2/image/upload',
       formData
-    ).subscribe({
+    ).pipe(finalize(() => this.isUploading = false)).subscribe({
       next: (response) => {
 
         this.uploadedImageUrl = response.secure_url;
@@ -82,10 +90,10 @@ export class AddSpace {
           image_url: this.uploadedImageUrl
         });
 
-        alert('Image uploaded successfully');
+        this.successMessage = 'Image uploaded successfully. Your listing is ready to publish.';
       },
       error: () => {
-        alert('Image upload failed');
+        this.errorMessage = 'Image upload failed';
       }
     });
   }

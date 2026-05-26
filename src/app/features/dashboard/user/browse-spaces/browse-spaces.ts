@@ -26,6 +26,14 @@ export class BrowseSpaces implements OnInit {
   filteredSpaces: Space[] = [];
   isLoading = true;
   selectedType = "";
+  searchTerm = "";
+  readonly typeOptions = [
+    { label: 'All workspace types', value: '' },
+    { label: 'Private Cabin', value: 'private_cabin' },
+    { label: 'Hot Desk', value: 'hot_desk' },
+    { label: 'Meeting Room', value: 'meeting_room' },
+    { label: 'Event Space', value: 'event_space' },
+  ];
 
   constructor(
     private spaceService: SpaceService,
@@ -57,16 +65,17 @@ export class BrowseSpaces implements OnInit {
   }
 
   filterSpaces() {
+    const normalizedSearch = this.searchTerm.trim().toLowerCase();
 
-    if (!this.selectedType) {
-      this.filteredSpaces = this.spaces;
-      return;
-    }
+    this.filteredSpaces = this.spaces.filter((space) => {
+      const matchesType = !this.selectedType || space.space_type === this.selectedType;
+      const matchesSearch =
+        !normalizedSearch ||
+        space.space_name.toLowerCase().includes(normalizedSearch) ||
+        space.location.toLowerCase().includes(normalizedSearch);
 
-    this.filteredSpaces = this.spaces.filter(
-      space => space.space_type === this.selectedType
-    );
-
+      return matchesType && matchesSearch;
+    });
   }
 
   bookSpace(spaceId: string) {
@@ -78,6 +87,13 @@ export class BrowseSpaces implements OnInit {
       }
     );
 
+  }
+
+  formatType(type: string): string {
+    return type
+      .split('_')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
   }
 
 }

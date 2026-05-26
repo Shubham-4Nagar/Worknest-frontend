@@ -1,25 +1,143 @@
-<div class="dashboard-container">
-  <h1>Welcome to Worknest, {{firstName}}</h1>
+<div class="page-shell">
+  <section class="hero-panel">
+    <p class="eyebrow">User workspace</p>
+    <h2>Welcome back, {{ firstName }}.</h2>
+    <p>
+      Keep your next booking moving, compare workspace types faster, and start
+      your path to becoming a Worknest host when you are ready.
+    </p>
 
-  <p class="subtitle">
-    Find and book your perfect workspace
-  </p>
-
-  <div class="card-grid">
-    <div class="dashboard-card" routerLink="/dashboard/user/browse">
-      <h3>Browse Spaces</h3>
-      <p>Explore available coworking spaces</p>
+    <div class="cta-row hero-actions">
+      <a class="btn-primary" routerLink="/dashboard/user/browse">
+        <i class="bi bi-search"></i>
+        <span>Browse Spaces</span>
+      </a>
+      <a class="btn-ghost" routerLink="/dashboard/user/bookings">
+        <i class="bi bi-calendar3"></i>
+        <span>Open Bookings</span>
+      </a>
     </div>
 
-    <div class="dashboard-card" routerLink="/dashboard/user/bookings">
-      <h3>My Bookings</h3>
-      <p>View your booking history</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>{{ spaces.length }}</strong>
+        <span>spaces ready to explore</span>
+      </div>
+      <div class="hero-stat">
+        <strong>{{ activeBookingsCount }}</strong>
+        <span>active reservations</span>
+      </div>
+      <div class="hero-stat">
+        <strong>{{ availableTypesCount }}</strong>
+        <span>workspace formats</span>
+      </div>
     </div>
+  </section>
 
-    <div class="dashboard-card" routerLink="/dashboard/user/request-owner">
-      <h3>Become an Owner</h3>
-      <p>Request access to list your spaces</p>
-    </div>
+  <section class="kpi-grid" *ngIf="!isLoading">
+    <article class="metric-card">
+      <div class="metric-label">Available spaces</div>
+      <div class="metric-value">{{ spaces.length }}</div>
+      <div class="metric-meta">Across private cabins, hot desks, and more.</div>
+    </article>
 
+    <article class="metric-card">
+      <div class="metric-label">Active bookings</div>
+      <div class="metric-value">{{ activeBookingsCount }}</div>
+      <div class="metric-meta">Upcoming or awaiting confirmation right now.</div>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-label">Completed stays</div>
+      <div class="metric-value">{{ completedBookingsCount }}</div>
+      <div class="metric-meta">A quick view of your past workspace sessions.</div>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-label">Owner readiness</div>
+      <div class="metric-value">{{ availableTypesCount }}</div>
+      <div class="metric-meta">See what kind of inventory Worknest is attracting.</div>
+    </article>
+  </section>
+
+  <div class="split-grid">
+    <section class="surface-card">
+      <div class="page-header compact">
+        <div>
+          <p class="eyebrow">Quick actions</p>
+          <h2 class="section-title">What you can do next</h2>
+          <p class="section-copy">Move from discovery to booking without leaving your dashboard.</p>
+        </div>
+      </div>
+
+      <div class="panel-grid quick-actions">
+        <a class="action-card" routerLink="/dashboard/user/browse">
+          <i class="bi bi-buildings"></i>
+          <h3>Discover new spaces</h3>
+          <p>Filter by type and find the right environment for your next session.</p>
+        </a>
+
+        <a class="action-card" routerLink="/dashboard/user/bookings">
+          <i class="bi bi-journal-check"></i>
+          <h3>Track every booking</h3>
+          <p>Stay on top of upcoming dates, status updates, and recent history.</p>
+        </a>
+
+        <a class="action-card" routerLink="/dashboard/user/request-owner">
+          <i class="bi bi-person-badge"></i>
+          <h3>Apply as an owner</h3>
+          <p>Upload your documents and start listing spaces on Worknest.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="surface-card">
+      <div class="page-header compact">
+        <div>
+          <p class="eyebrow">Recent activity</p>
+          <h2 class="section-title">Latest bookings</h2>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && recentBookings.length === 0">
+        <h3>No bookings yet</h3>
+        <p>Your first reservation will show up here with status updates.</p>
+      </div>
+
+      <div class="activity-list" *ngIf="!isLoading && recentBookings.length > 0">
+        <article class="activity-item" *ngFor="let booking of recentBookings">
+          <div>
+            <h3>{{ booking.space_name }}</h3>
+            <p>{{ getBookingDateLabel(booking) }}</p>
+          </div>
+          <span class="status-pill" [ngClass]="booking.status.toLowerCase()">
+            {{ booking.status || 'pending' }}
+          </span>
+        </article>
+      </div>
+    </section>
   </div>
+
+  <section class="surface-card">
+    <div class="page-header compact">
+      <div>
+        <p class="eyebrow">Marketplace mix</p>
+        <h2 class="section-title">Popular workspace formats</h2>
+        <p class="section-copy">A fast read on the types of spaces currently available to book.</p>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="!isLoading && topWorkspaceTypes.length === 0">
+      <h3>No workspace data yet</h3>
+      <p>Once spaces are available, Worknest will show the strongest categories here.</p>
+    </div>
+
+    <div class="panel-grid" *ngIf="!isLoading && topWorkspaceTypes.length > 0">
+      <article class="format-card" *ngFor="let item of topWorkspaceTypes">
+        <span class="chip neutral">{{ item.count }} listed</span>
+        <h3>{{ item.label }}</h3>
+        <p>Well suited for teams looking for this format on the marketplace.</p>
+      </article>
+    </div>
+  </section>
 </div>

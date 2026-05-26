@@ -1,58 +1,86 @@
-<div class="dashboard-container">
-  <aside class="sidebar">
-    <!-- USER SIDEBAR -->
-    <ng-container *ngIf="role === 'User'">
-      <h3>User Panel</h3>
-      <ul>
-        <li routerLink="/dashboard/user" routerLinkActive="active">Dashboard</li>
+<div class="dashboard-shell" [class.sidebar-open]="isSidebarOpen">
+  <button
+    *ngIf="isSidebarOpen && isMobile "
+    class="dashboard-backdrop"
+    type="button"
+    (click)="closeSidebar()"
+    aria-label="Close navigation"
+  ></button>
 
-        <li routerLink="/dashboard/user/browse" routerLinkActive="active">Browse Spaces</li>
-
-        <li routerLink="/dashboard/user/bookings" routerLinkActive="active">My Bookings</li>
-
-        <li routerLink="/dashboard/user/request-owner" routerLinkActive="active">Become Owner</li>
-      </ul>
-    </ng-container>
-
-    <!-- OWNER SIDEBAR -->
-    <ng-container *ngIf="role === 'Owner'">
-      <h3>Owner Panel</h3>
-
-      <ul>
-        <li routerLink="/dashboard/owner/spaces" routerLinkActive="active">Your Spaces</li>
-
-        <li routerLink="/dashboard/owner/add-space" routerLinkActive="active">Add Space</li>
-
-        <li routerLink="/dashboard/owner/bookings" routerLinkActive="active">Bookings</li>
-
-        <li routerLink="/dashboard/owner/earnings" routerLinkActive="active">Earnings</li>
-      </ul>
-    </ng-container>
-    <!--ADMIN SIDEBAR-->
-    <ng-container *ngIf="role === 'Admin'">
-      <h3>Admin Panel</h3>
-      <ul>
-        <li routerLink="/dashboard/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</li>
-        <li routerLink="/dashboard/admin/owner-requests" routerLinkActive="active">
-          Owner Requests
-        </li>
-        <li routerLink="/dashboard/admin/spaces" routerLinkActive="active">Manage Spaces</li>
-        <li routerLink="/dashboard/admin/users" routerLinkActive="active">Total Users</li>
-        <li routerLink="/dashboard/admin/bookings" routerLinkActive="active">Total Bookings</li>
-        <li routerLink="/dashboard/admin/revenue" routerLinkActive="active">Total Revenue</li>
-      </ul>
-    </ng-container>
-  </aside>
-
-  <div class="main-area">
-    <div class="topbar">
-      <button class="logout-btn" (click)="logout()">
-        Logout
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-lockup">
+        <img src="worknest-logo.svg" alt="Worknest logo" class="brand-logo" />
+        <div>
+          <p class="eyebrow">Worknest</p>
+          <h2>Workspace OS</h2>
+        </div>
+      </div>
+      <button type="button" class="sidebar-close" (click)="closeSidebar()" aria-label="Close menu">
+        <i class="bi bi-x-lg"></i>
       </button>
     </div>
-  </div>
 
-  <main class="content">
-    <router-outlet></router-outlet>
-  </main>
+    <div class="sidebar-profile">
+      <span class="sidebar-role">{{ role || 'Account' }}</span>
+      <h3>{{ userName }}</h3>
+      <p>{{ roleDescription }}</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+        (click)="closeSidebar()"
+      >
+        <i [class]="item.icon"></i>
+        <div>
+          <strong>{{ item.label }}</strong>
+          <span>{{ item.description }}</span>
+        </div>
+      </a>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="sidebar-tip">
+        <i class="bi bi-stars"></i>
+        <span>Worknest keeps your space, bookings, and approvals in sync.</span>
+      </div>
+
+      <button class="sidebar-logout" type="button" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="dashboard-main">
+    <header class="dashboard-topbar">
+      <div class="topbar-title">
+        <button type="button" class="menu-toggle" (click)="toggleSidebar()" aria-label="Open navigation">
+          <i class="bi bi-list"></i>
+        </button>
+        <div>
+          <p class="eyebrow">{{ role || 'Worknest' }} dashboard</p>
+          <h1>{{ currentHeading }}</h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <a class="profile-button" routerLink="/dashboard/profile">
+          <span class="profile-trigger-avatar">{{ userInitials }}</span>
+          <span class="profile-meta">
+            <strong>{{ userName }}</strong>
+            <small>{{ userEmail }}</small>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <main class="dashboard-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

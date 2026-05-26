@@ -1,35 +1,72 @@
-.container {
-  padding: 20px;
+.booking-form-shell {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .booking-form {
-  margin-bottom: 20px;
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
-input {
-  padding: 8px;
-  margin-right: 10px;
+.booking-form input {
+  min-width: 220px;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
 }
 
-button {
-  padding: 8px 15px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.booking-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
 }
 
-.card {
-  background: white;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 10px;
+.booking-card {
+  padding: 1.4rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-soft);
 }
 
-.status {
-  font-weight: bold;
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
 }
 
-.message {
-  color: green;
+.card-top h3 {
+  margin: 0;
+}
+
+.card-top p {
+  margin: 0.45rem 0 0;
+  color: var(--text-muted);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.1rem;
+}
+
+.detail-grid strong {
+  display: block;
+  margin-top: 0.3rem;
+}
+
+.cancel-btn {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
 }

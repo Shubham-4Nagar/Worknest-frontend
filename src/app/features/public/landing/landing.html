@@ -1,93 +1,98 @@
-<header class="navbar">
-  <div class="logo">WORKNEST</div>
-  <div class="nav-buttons">
-    <a routerLink="/login" class="btn outline">Login</a>
-    <a routerLink="/register" class="btn solid">Register</a>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="overlay"></div>
-  <div class="hero-content">
-    <h1>Find Your Perfect <span>Workspace</span></h1>
-    <p>Flexible coworking spaces for creators, startups & teams.</p>
-    <a routerLink="/register" class="cta-btn">Start Exploring</a>
-  </div>
-</section>
-
-<section class="features">
-  <h2>Why WorkNest?</h2>
-  <div class="cards">
-    <div class="feature-card">
-      <h3> Flexible Booking</h3>
-      <p>Book hourly, daily or monthly with instant confirmation.</p>
+<div class="landing-shell">
+  <header class="landing-nav">
+    <div class="brand-mark">
+      <span>Worknest</span>
+      <small>Flexible workspace marketplace</small>
     </div>
 
-    <div class="feature-card">
-      <h3> Secure Payments</h3>
-      <p>End-to-end encrypted & safe transactions.</p>
+    <div class="nav-buttons">
+      <a routerLink="/login" class="btn-ghost nav-btn">Login</a>
+      <a routerLink="/register" class="btn-primary nav-btn">Create account</a>
     </div>
+  </header>
 
-    <div class="feature-card">
-      <h3> Premium Locations</h3>
-      <p>Top-rated coworking spaces in prime areas.</p>
-    </div>
-  </div>
-</section>
+  <section class="landing-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Smart spaces, smarter operations</p>
+      <h1>One home for booking workspaces and running them beautifully.</h1>
+      <p class="hero-text">
+        Worknest helps users discover polished spaces, gives owners a real operating
+        dashboard, and keeps admins in control of approvals, listings, and growth.
+      </p>
 
-<section class="spaces">
-  <h2>Explore Space Types</h2>
+      <div class="cta-row">
+        <a routerLink="/register" class="btn-primary hero-btn">Start with Worknest</a>
+        <a routerLink="/login" class="btn-ghost hero-btn">Open dashboard</a>
+      </div>
 
-  <div class="space-grid">
-
-    <div class="space-card">
-      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c" alt="Private Office">
-      <div class="space-content">
-        <h3>Private Cabins</h3>
-        <p>
-          Fully furnished private cabins designed for teams and founders 
-          who need focus, privacy, and a distraction-free work environment.
-        </p>
+      <div class="hero-metrics">
+        <article class="hero-metric" *ngFor="let item of stats">
+          <strong>{{ item.value }}</strong>
+          <span>{{ item.label }}</span>
+        </article>
       </div>
     </div>
 
-    <div class="space-card">
-      <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70" alt="Open Desk">
-      <div class="space-content">
-        <h3>Hot Desks</h3>
-        <p>
-          Vibrant shared workspaces built for networking, collaboration, 
-          and flexibility — ideal for freelancers and remote professionals.
-        </p>
+    <div class="hero-preview">
+      <div class="preview-card main-preview">
+        <span class="preview-badge">Operations overview</span>
+        <h3>Role-based dashboards that actually help people work.</h3>
+        <p>Users browse and book, owners operate portfolios, and admins keep the marketplace trusted.</p>
+      </div>
+
+      <div class="preview-grid">
+        <article class="preview-card mini-preview">
+          <h4>User</h4>
+          <p>Space discovery, booking management, and owner onboarding.</p>
+        </article>
+        <article class="preview-card mini-preview accent">
+          <h4>Owner</h4>
+          <p>Portfolio health, booking approvals, and earnings visibility.</p>
+        </article>
       </div>
     </div>
+  </section>
 
-    <div class="space-card">
-      <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0" alt="Meeting Room">
-      <div class="space-content">
-        <h3>Meeting Rooms</h3>
-        <p>
-          Professional meeting rooms equipped with smart displays, 
-          high-speed WiFi, and video conferencing for client presentations.
-        </p>
-      </div>
+  <section class="story-grid">
+    <article class="story-card">
+      <span class="chip neutral">Users</span>
+      <h3>Discover the right space faster</h3>
+      <p>Search, compare, and reserve a workspace without getting lost in clutter.</p>
+    </article>
+    <article class="story-card">
+      <span class="chip info">Owners</span>
+      <h3>Operate like a modern host</h3>
+      <p>Stay on top of pending bookings, active inventory, and revenue in one place.</p>
+    </article>
+    <article class="story-card">
+      <span class="chip success">Admins</span>
+      <h3>Keep quality high</h3>
+      <p>Verify owners, moderate spaces, and track platform growth with clear signals.</p>
+    </article>
+  </section>
+
+  <section class="space-types">
+    <div class="section-heading">
+      <p class="eyebrow">Marketplace inventory</p>
+      <h2>Workspace types built for different ways of working</h2>
     </div>
 
-    <div class="space-card">
-      <img src="https://images.unsplash.com/photo-1511578314322-379afb476865" alt="Conference Hall">
-      <div class="space-content">
-        <h3>Event Spaces</h3>
-        <p>
-          Large, premium halls perfect for corporate events, 
-          workshops, product launches, and networking meetups.
-        </p>
-      </div>
+    <div class="space-cards">
+      <article class="space-card" *ngFor="let type of spaceTypes">
+        <img [src]="type.image + '?auto=format&fit=crop&w=900&q=80'" [alt]="type.label" />
+        <div class="space-content">
+          <span class="chip neutral">{{ type.label }}</span>
+          <p>{{ type.description }}</p>
+        </div>
+      </article>
     </div>
+  </section>
 
-  </div>
-</section>
-
-<section class="bottom-cta">
-  <h2>Boost Your Productivity Today</h2>
-  <a routerLink="/register" class="cta-btn big">Create Free Account</a>
-</section>
+  <section class="bottom-cta">
+    <div>
+      <p class="eyebrow">Ready to ship the better version?</p>
+      <h2>Join Worknest and start using the redesigned experience.</h2>
+    </div>
+    <a routerLink="/register" class="btn-primary hero-btn">Create free account</a>
+  </section>
+</div>

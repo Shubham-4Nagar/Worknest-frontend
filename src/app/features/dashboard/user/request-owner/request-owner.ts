@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
 import { RequestOwnerService } from "../../../../core/services/owner-request.service";
+import { finalize } from "rxjs";
 
 @Component({
   selector: 'app-request-owner',
@@ -15,6 +16,7 @@ export class RequestOwner {
 
   selectedFile!: File;
   uploadedFileUrl: string | null = null;
+  selectedFileName = '';
 
   isUploading = false;
   isSubmitting = false;
@@ -33,6 +35,8 @@ export class RequestOwner {
     if (!file) return;
 
     this.selectedFile = file;
+    this.selectedFileName = file.name;
+    this.message = '';
   }
 
   // Upload to Cloudinary
@@ -47,24 +51,23 @@ export class RequestOwner {
     formData.append('upload_preset', 'worknest_upsigned');
     formData.append('folder', 'worknest/id_proofs');
 
+    this.message = '';
+
     this.http.post<any>(
       'https://api.cloudinary.com/v1_1/ddjbb1yy2/image/upload',
       formData
-    ).subscribe({
+    ).pipe(finalize(() => this.isUploading = false)).subscribe({
 
       next: (response) => {
 
         this.uploadedFileUrl = response.secure_url;
-        this.isUploading = false;
-
-        alert('Document uploaded successfully');
+        this.message = 'Document uploaded successfully. You can submit the request now.';
 
       },
 
       error: () => {
 
-        this.isUploading = false;
-        alert('Upload failed');
+        this.message = 'Upload failed. Please try again.';
 
       }
 
@@ -81,16 +84,14 @@ export class RequestOwner {
 
     this.requestService.submitRequest({
         id_proof:this.uploadedFileUrl
-    }).subscribe({
+    }).pipe(finalize(() => this.isSubmitting = false)).subscribe({
 
         next: () => {
             this.message = "Owner request submitted Successfully";
-            this.isSubmitting = false;
         },
 
         error: (err) => {
             this.message = err.error?.error || "Request Failed";
-            this.isSubmitting = false;
         }
     });
 }

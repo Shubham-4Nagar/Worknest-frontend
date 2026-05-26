@@ -1,66 +1,72 @@
-<div class="add-space-container">
-  <h2>Add New Space</h2>
-
-  <form [formGroup]="spaceForm" (ngSubmit)="onSubmit()">
-
-    <div class="form-group">
-      <label>Space Name</label>
-      <input type="text" formControlName="space_name" />
-      <small *ngIf="submitted && spaceForm.get('space_name')?.invalid">
-        Space name is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label>Location</label>
-      <input type="text" formControlName="location" />
-      <small *ngIf="submitted && spaceForm.get('location')?.invalid">
-        Location is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label>Maximum Capacity</label>
-      <input type="number" formControlName="max_capacity" />
-      <small *ngIf="submitted && spaceForm.get('max_capacity')?.invalid">
-        Valid capacity required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label>Space Type</label>
-      <select formControlName="space_type">
-        <option value="">Select Type</option>
-        <option *ngFor="let type of spaceTypes" [value]="type.value">
-          {{ type.label }}
-        </option>
-      </select>
-      <small *ngIf="submitted && spaceForm.get('space_type')?.invalid">
-        Space type is required
-      </small>
-    </div>
-
-    <div class="form-group">
-      <label>Description</label>
-      <textarea formControlName="description"></textarea>
-    </div>
+<div class="page-shell">
+  <section class="page-header">
     <div>
-      <label>Upload Image</label>
-      <input type="file" accept="image/*" (change)="onFileSelected($event)">
-
-      <button type="button" (click)="uploadImage()" [disabled]="!selectedFile">
-        Upload Image
-      </button>
-      <div *ngIf="imagePreview">
-        <img [src]="imagePreview"
-        width="200"
-        style="margin-top: 10px;">
-      </div>
+      <p class="eyebrow">New listing</p>
+      <h2>Add a workspace to Worknest</h2>
+      <p class="page-copy">Create a polished listing with type, capacity, location, description, and a strong cover image.</p>
     </div>
+  </section>
 
-    <button type="submit" [disabled]="spaceForm.invalid || !uploadImage || !isLoading">
-      Create Space
-    </button>
+  <section class="surface-card form-shell">
+    <form [formGroup]="spaceForm" (ngSubmit)="onSubmit()">
+      <div class="field-grid">
+        <div class="field">
+          <label>Space name</label>
+          <input type="text" formControlName="space_name" placeholder="Boardroom Loft" />
+          <span class="error-text" *ngIf="submitted && spaceForm.get('space_name')?.invalid">Space name is required.</span>
+        </div>
 
-  </form>
+        <div class="field">
+          <label>Location</label>
+          <input type="text" formControlName="location" placeholder="Bengaluru, Koramangala" />
+          <span class="error-text" *ngIf="submitted && spaceForm.get('location')?.invalid">Location is required.</span>
+        </div>
+
+        <div class="field">
+          <label>Maximum capacity</label>
+          <input type="number" formControlName="max_capacity" placeholder="12" />
+          <span class="error-text" *ngIf="submitted && spaceForm.get('max_capacity')?.invalid">Enter a valid capacity.</span>
+        </div>
+
+        <div class="field">
+          <label>Space type</label>
+          <select formControlName="space_type">
+            <option value="">Select type</option>
+            <option *ngFor="let type of spaceTypes" [value]="type.value">
+              {{ type.label }}
+            </option>
+          </select>
+          <span class="error-text" *ngIf="submitted && spaceForm.get('space_type')?.invalid">Space type is required.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description</label>
+        <textarea formControlName="description" placeholder="Describe the experience, setup, internet quality, and ideal use cases."></textarea>
+      </div>
+
+      <div class="upload-section">
+        <div class="field">
+          <label>Upload cover image</label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+          <span class="helper-text">A clean wide image improves bookings and trust.</span>
+        </div>
+
+        <button class="btn-secondary upload-btn" type="button" (click)="uploadImage()" [disabled]="!selectedFile || isUploading">
+          {{ isUploading ? 'Uploading...' : 'Upload image' }}
+        </button>
+      </div>
+
+      <div *ngIf="imagePreview" class="preview-card">
+        <img [src]="imagePreview" alt="Image preview" />
+      </div>
+
+      <p class="success-text" *ngIf="successMessage">{{ successMessage }}</p>
+      <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button class="btn-primary submit-btn" type="submit" [disabled]="spaceForm.invalid || !uploadedImageUrl || isLoading">
+        {{ isLoading ? 'Creating space...' : 'Create space' }}
+      </button>
+    </form>
+  </section>
 </div>

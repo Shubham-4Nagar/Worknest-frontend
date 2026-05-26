@@ -1,1 +1,72 @@
-<p>users works!</p>
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">People operations</p>
+      <h2>Users and role distribution</h2>
+      <p class="page-copy">Track who is using the platform and how the marketplace is shifting between users and owners.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip neutral">{{ users.length }} members</span>
+      <span class="chip info">{{ getRoleCount('Owner') }} owners</span>
+      <span class="chip success">{{ getRoleCount('Admin') }} admins</span>
+    </div>
+  </section>
+
+  <section class="surface-card">
+    <div class="toolbar-row">
+      <input
+        class="toolbar-input"
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by name or email"
+      />
+      <select class="toolbar-input" [(ngModel)]="selectedRole">
+        <option value="All">All roles</option>
+        <option value="User">Users</option>
+        <option value="Owner">Owners</option>
+        <option value="Admin">Admins</option>
+      </select>
+    </div>
+  </section>
+
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading users</h3>
+    <p>The member roster is being prepared.</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredUsers.length === 0" class="empty-state">
+    <h3>No users found</h3>
+    <p>Try changing the search term or role filter.</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredUsers.length > 0" class="table-surface">
+    <div class="table-header">
+      <div>
+        <h3>Member directory</h3>
+        <p class="muted-copy">A quick lookup of Worknest accounts and their current roles.</p>
+      </div>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Joined</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td>{{ getDisplayName(user) }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="status-pill" [ngClass]="(user.role || 'User').toLowerCase() === 'owner' ? 'approved' : (user.role || 'User').toLowerCase() === 'admin' ? 'completed' : 'active'">
+              {{ user.role || 'User' }}
+            </span>
+          </td>
+          <td>{{ user.created_at ? (user.created_at | date:'mediumDate') : 'Recently added' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

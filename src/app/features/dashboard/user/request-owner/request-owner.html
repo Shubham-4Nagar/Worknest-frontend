@@ -1,38 +1,70 @@
-<div class="container">
-
-  <h2>Request Owner Access</h2>
-
-  <div class="card">
-
-    <label>Select ID Proof (PDF, JPG, PNG)</label>
-
-    <input
-      type="file"
-      (change)="onFileSelected($event)"
-      accept=".pdf,.jpg,.jpeg,.png"
-    >
-
-    <button
-      (click)="uploadFile()"
-      [disabled]="isUploading"
-    >
-      {{ isUploading ? 'Uploading...' : 'Upload Document' }}
-    </button>
-
-    <div *ngIf="uploadedFileUrl" class="success">
-      Document uploaded successfully
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Owner onboarding</p>
+      <h2>Apply for owner access</h2>
+      <p class="page-copy">Upload a valid ID proof so the admin team can verify and unlock your owner dashboard.</p>
     </div>
+  </section>
 
-    <button
-      class="submit-btn"
-      (click)="submitRequest()"
-      [disabled]="!uploadedFileUrl || isSubmitting"
-    >
-      {{ isSubmitting ? 'Submitting...' : 'Submit Owner Request' }}
-    </button>
+  <section class="request-grid">
+    <article class="surface-card request-info">
+      <h3>How approval works</h3>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div>
+            <h4>1. Upload your ID proof</h4>
+            <p>PDF, JPG, JPEG, or PNG formats are supported.</p>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div>
+            <h4>2. Submit the request</h4>
+            <p>Worknest shares the secure file link with the admin review queue.</p>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div>
+            <h4>3. Start listing spaces</h4>
+            <p>Once approved, your owner dashboard opens up for space management.</p>
+          </div>
+        </div>
+      </div>
+    </article>
 
-    <p class="message">{{ message }}</p>
+    <article class="surface-card upload-card">
+      <div class="field">
+        <label>Select ID proof</label>
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          accept=".pdf,.jpg,.jpeg,.png"
+        />
+        <span class="helper-text" *ngIf="selectedFileName">{{ selectedFileName }}</span>
+      </div>
 
-  </div>
+      <div class="cta-row">
+        <button class="btn-secondary" type="button" (click)="uploadFile()" [disabled]="!selectedFile || isUploading">
+          {{ isUploading ? 'Uploading...' : 'Upload document' }}
+        </button>
 
+        <button
+          class="btn-primary"
+          type="button"
+          (click)="submitRequest()"
+          [disabled]="!uploadedFileUrl || isSubmitting"
+        >
+          {{ isSubmitting ? 'Submitting...' : 'Submit owner request' }}
+        </button>
+      </div>
+
+      <span *ngIf="uploadedFileUrl" class="status-pill approved">Document uploaded</span>
+      <p
+        [class.success-text]="message.toLowerCase().includes('success') || message.toLowerCase().includes('uploaded')"
+        [class.error-text]="message.toLowerCase().includes('failed')"
+      >
+        {{ message }}
+      </p>
+    </article>
+  </section>
 </div>

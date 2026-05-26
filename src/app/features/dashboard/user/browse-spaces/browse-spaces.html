@@ -1,36 +1,66 @@
-<div class="container">
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Space discovery</p>
+      <h2>Browse available workspaces</h2>
+      <p class="page-copy">Search by name, location, or workspace type to find the right fit faster.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip neutral">{{ filteredSpaces.length }} results</span>
+      <span class="chip info">{{ spaces.length }} total spaces</span>
+    </div>
+  </section>
 
-  <h2>Browse Spaces</h2>
-  <div class="filter-bar">
-    <label>Filter by Type:</label>
-    <select [(ngModel)]="selectedType" (change)="filterSpaces()">
-      <option value="">All</option>
-      <option value="private_cabin">Private Cabin</option>
-      <option value="meeting_room">Meeting Room</option>
-      <option value="open_desk">Open Desk</option>
-      <option value="event_space">Event Space</option>
-    </select>
-  </div>
-  <div *ngIf="isLoading">
-    Loading spaces...
+  <section class="surface-card">
+    <div class="toolbar-row browse-toolbar">
+      <input
+        class="toolbar-input"
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="filterSpaces()"
+        placeholder="Search by space or city"
+      />
+
+      <select class="toolbar-input" [(ngModel)]="selectedType" (change)="filterSpaces()">
+        <option *ngFor="let option of typeOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+  </section>
+
+  <div class="empty-state" *ngIf="isLoading">
+    <h3>Loading spaces</h3>
+    <p>Worknest is gathering the latest workspace inventory for you.</p>
   </div>
 
-  <!-- SPACE CARDS -->
-  <div class="grid">
-    <div class="card" *ngFor="let space of filteredSpaces">
-      <img
-        [src]="space.image_url || 'assets/default-space.jpg'"
-        class="image"
-      >
+  <div class="empty-state" *ngIf="!isLoading && filteredSpaces.length === 0">
+    <h3>No spaces match this filter</h3>
+    <p>Try another workspace type or clear the search to see more results.</p>
+  </div>
+
+  <section class="space-grid" *ngIf="!isLoading && filteredSpaces.length > 0">
+    <article class="space-browser-card" *ngFor="let space of filteredSpaces">
+      <div class="image-wrap">
+        <img
+          [src]="space.image_url || 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80'"
+          [alt]="space.space_name"
+          class="image"
+        />
+        <span class="status-pill active">{{ formatType(space.space_type) }}</span>
+      </div>
+
       <div class="card-body">
-        <h3>{{ space.space_name }}</h3>
-        <p> {{ space.location }}</p>
-        <p> {{ space.space_type }}</p>
-        <p> Capacity: {{ space.max_capacity }}</p>
-        <button (click)="bookSpace(space.space_id)">
-          Book Space
+        <div class="card-heading">
+          <h3>{{ space.space_name }}</h3>
+          <span>{{ space.max_capacity }} seats</span>
+        </div>
+        <p>{{ space.location }}</p>
+        <button class="btn-primary space-btn" type="button" (click)="bookSpace(space.space_id)">
+          <i class="bi bi-calendar-plus"></i>
+          <span>Book this space</span>
         </button>
       </div>
-    </div>
-  </div>
+    </article>
+  </section>
 </div>

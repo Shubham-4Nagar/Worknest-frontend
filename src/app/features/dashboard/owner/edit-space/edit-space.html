@@ -1,25 +1,54 @@
-<h2>Edit Space</h2>
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Listing editor</p>
+      <h2>Edit your space</h2>
+      <p class="page-copy">Update the essentials guests rely on before they book your workspace.</p>
+    </div>
+  </section>
 
-<div *ngIf="isLoading">
-  Loading...
-</div>
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading space details</h3>
+    <p>Worknest is preparing the listing for editing.</p>
+  </div>
 
-<div *ngIf="!isLoading">
-  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+  <section *ngIf="!isLoading" class="surface-card">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <div class="field-grid">
+        <div class="field">
+          <label>Name</label>
+          <input formControlName="space_name" />
+        </div>
 
-    <label>Name</label>
-    <input formControlName="space_name">
+        <div class="field">
+          <label>Location</label>
+          <input formControlName="location" />
+        </div>
 
-    <label>Location</label>
-    <input formControlName="location">
+        <div class="field">
+          <label>Capacity</label>
+          <input type="number" formControlName="max_capacity" />
+        </div>
 
-    <label>Capacity</label>
-    <input type="number" formControlName="max_capacity">
+        <div class="field">
+          <label>Type</label>
+          <select formControlName="space_type">
+            <option *ngFor="let type of spaceTypes" [value]="type.value">
+              {{ type.label }}
+            </option>
+          </select>
+        </div>
+      </div>
 
-    <label>Type</label>
-    <input formControlName="space_type">
+      <div class="field">
+        <label>Description</label>
+        <textarea formControlName="description"></textarea>
+      </div>
 
-    <button type="submit">Update Space</button>
-
-  </form>
+      <p class="error-text" *ngIf="message && message.toLowerCase().includes('failed')">{{ message }}</p>
+      <button class="btn-primary submit-btn" type="submit" [disabled]="editForm.invalid || isSaving">
+        {{ isSaving ? 'Updating...' : 'Update space' }}
+      </button>
+    </form>
+  </section>
 </div>

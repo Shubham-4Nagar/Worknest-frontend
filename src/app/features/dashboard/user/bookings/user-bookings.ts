@@ -3,12 +3,17 @@ import { CommonModule } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { BookingService } from "../../../../core/services/booking.service";
+import { finalize } from "rxjs";
 
 interface Booking {
   booking_id: string;
   space_name: string;
   booking_date: string;
   status: string;
+  start_date?: string;
+  end_date?: string;
+  total_amount?: number;
+  booking_type?: string;
 }
 
 @Component({
@@ -27,7 +32,9 @@ export class UserBookings implements OnInit {
 
   isLoading = true;
   isCreating = false;
+  isCancelling = false;
   message = "";
+  minDate = new Date().toISOString().split("T")[0];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,8 +56,8 @@ export class UserBookings implements OnInit {
 
     this.bookingService.getMyBookings().subscribe({
 
-      next: (data: Booking[]) => {
-        this.bookings = data;
+      next: (data: any) => {
+        this.bookings = Array.isArray(data) ? data : data?.bookings || [];
         this.isLoading = false;
       },
 
@@ -73,7 +80,7 @@ export class UserBookings implements OnInit {
       space_id: this.spaceId,
       booking_date: this.bookingDate
 
-    }).subscribe({
+    }).pipe(finalize(() => this.isCreating = false)).subscribe({
 
       next: () => {
 
@@ -83,18 +90,40 @@ export class UserBookings implements OnInit {
         this.spaceId = null;
 
         this.loadBookings();
-
-        this.isCreating = false;
       },
 
       error: () => {
 
         this.message = "Failed to create booking";
-        this.isCreating = false;
       }
 
     });
 
+  }
+
+  cancelBooking(bookingId: string) {
+    this.isCancelling = true;
+    this.message = '';
+
+    this.bookingService.cancelBooking(bookingId)
+      .pipe(finalize(() => this.isCancelling = false))
+      .subscribe({
+        next: () => {
+          this.message = 'Booking cancelled successfully';
+          this.loadBookings();
+        },
+        error: () => {
+          this.message = 'Unable to cancel the booking right now';
+        },
+      });
+  }
+
+  getStatusCount(status: string): number {
+    return this.bookings.filter((booking) => booking.status?.toLowerCase() === status).length;
+  }
+
+  getDisplayDate(booking: Booking): string {
+    return booking.booking_date || booking.start_date || booking.end_date || 'Date pending';
   }
 
 }

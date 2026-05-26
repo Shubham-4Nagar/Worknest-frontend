@@ -1,0 +1,46 @@
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Account profile</p>
+      <h2>Your Worknest profile</h2>
+      <p class="page-copy">Review the account details connected to your dashboard access.</p>
+    </div>
+  </section>
+
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading profile</h3>
+    <p>Your account details are being prepared.</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="profile-grid">
+    <section class="surface-card profile-hero">
+      <div class="profile-avatar">{{ initials }}</div>
+      <div>
+        <span class="status-pill approved">{{ role }}</span>
+        <h3>{{ displayName }}</h3>
+        <p>{{ email }}</p>
+      </div>
+    </section>
+
+    <section class="surface-card">
+      <div class="detail-list">
+        <div class="detail-row">
+          <span class="metric-label">User ID</span>
+          <strong>{{ user?.user_id || user?.id || 'Not available' }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="metric-label">Role</span>
+          <strong>{{ role }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="metric-label">Email</span>
+          <strong>{{ email }}</strong>
+        </div>
+        <div class="detail-row">
+          <span class="metric-label">Joined</span>
+          <strong>{{ joinedDate ? (joinedDate | date:'mediumDate') : 'Recently added' }}</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -1,17 +1,39 @@
-<h2 class="page-title">Earnings</h2>
-
-<div *ngIf="isLoading" class="text-muted">Loading Earnings...</div>
-
-<div *ngIf="!isLoading">
-  <div class="card shadow-sm earning-card">
-    <div class="card-body text-center">
-      <h5 class="card-title text-muted">Total Earnings</h5>
-      <h1 class="display-5 fw-bold text-success">
-      {{ totalEarnings | currency:'INR':'symbol':'1.2.2':'en-IN'}}
-      </h1>
-      <p *ngIf="totalEarnings === 0" class="text-muted mt-3">
-        No completed payments or bookings yet.
-      </p>
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Revenue overview</p>
+      <h2>Track the money behind your portfolio</h2>
+      <p class="page-copy">Use this page to compare realized revenue against bookings still waiting for approval.</p>
     </div>
+  </section>
+
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading earnings</h3>
+    <p>Financial performance is being prepared.</p>
+  </div>
+
+  <section *ngIf="!isLoading" class="kpi-grid">
+    <article class="metric-card earning-highlight">
+      <div class="metric-label">Total earnings</div>
+      <div class="metric-value">{{ totalEarnings | currency:'INR':'symbol':'1.0-0':'en-IN' }}</div>
+      <div class="metric-meta">Revenue captured from completed or settled bookings.</div>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-label">Completed bookings</div>
+      <div class="metric-value">{{ completedBookings }}</div>
+      <div class="metric-meta">Closed stays contributing to your earnings line.</div>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-label">Pending booking value</div>
+      <div class="metric-value">{{ pendingValue | currency:'INR':'symbol':'1.0-0':'en-IN' }}</div>
+      <div class="metric-meta">Potential value waiting for approval and completion.</div>
+    </article>
+  </section>
+
+  <div *ngIf="!isLoading && totalEarnings === 0" class="empty-state">
+    <h3>No earnings recorded yet</h3>
+    <p>Approve bookings and complete stays to start building revenue.</p>
   </div>
 </div>

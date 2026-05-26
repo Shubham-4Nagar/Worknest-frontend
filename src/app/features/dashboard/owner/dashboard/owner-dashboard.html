@@ -1,27 +1,160 @@
-<h2>Your Spaces</h2>
+<div class="page-shell">
+  <section class="hero-panel">
+    <p class="eyebrow">Owner portfolio</p>
+    <h2>Run your spaces like an operator, not a spreadsheet.</h2>
+    <p>
+      Watch booking demand, spot capacity gaps, and keep your portfolio moving
+      with one clean control center.
+    </p>
 
-<div *ngIf="isLoading" class="loading">
-  Loading Spaces...
-</div>
-
-<div *ngIf="!isLoading && spaces.length === 0" class="empty">
-  No spaces created yet.
-</div>
-
-<div class="cards-container" *ngIf="!isLoading && spaces.length > 0">
-  <div class="space-card" *ngFor="let space of spaces">
-    <h3>{{ space.space_name }}</h3>
-
-    <p><strong> Location:</strong> {{ space.location }}</p>
-    <p><strong> Capacity:</strong> {{ space.max_capacity }}</p>
-
-    <span class="badge">
-      {{ space.space_type }}
-    </span>
-
-    <div class="card-actions">
-      <button [routerLink]="['/dashboard/owner/edit-space', space.space_id]">Edit</button>
-      <button class="danger" (click)="deleteSpace(space.space_id)">Delete</button>
+    <div class="cta-row hero-actions">
+      <a class="btn-primary" routerLink="/dashboard/owner/add-space">
+        <i class="bi bi-plus-circle"></i>
+        <span>Add a new space</span>
+      </a>
+      <a class="btn-ghost" routerLink="/dashboard/owner/bookings">
+        <i class="bi bi-journal-check"></i>
+        <span>Review bookings</span>
+      </a>
     </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>{{ spaces.length }}</strong>
+        <span>spaces listed</span>
+      </div>
+      <div class="hero-stat">
+        <strong>{{ pendingBookingsCount }}</strong>
+        <span>pending approvals</span>
+      </div>
+      <div class="hero-stat">
+        <strong>{{ totalEarnings | currency:'INR':'symbol':'1.0-0':'en-IN' }}</strong>
+        <span>captured earnings</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="kpi-grid" *ngIf="!isLoading">
+    <article class="metric-card">
+      <div class="metric-label">Total spaces</div>
+      <div class="metric-value">{{ spaces.length }}</div>
+      <div class="metric-meta">The size of your current portfolio on Worknest.</div>
+    </article>
+    <article class="metric-card">
+      <div class="metric-label">Pending bookings</div>
+      <div class="metric-value">{{ pendingBookingsCount }}</div>
+      <div class="metric-meta">Requests waiting for your confirmation.</div>
+    </article>
+    <article class="metric-card">
+      <div class="metric-label">Confirmed stays</div>
+      <div class="metric-value">{{ confirmedBookingsCount }}</div>
+      <div class="metric-meta">Accepted bookings currently in progress or upcoming.</div>
+    </article>
+    <article class="metric-card">
+      <div class="metric-label">Total capacity</div>
+      <div class="metric-value">{{ totalCapacity }}</div>
+      <div class="metric-meta">Combined seats available across all your spaces.</div>
+    </article>
+  </section>
+
+  <div class="split-grid">
+    <section class="surface-card">
+      <div class="page-header compact">
+        <div>
+          <p class="eyebrow">Recent demand</p>
+          <h2 class="section-title">Latest booking requests</h2>
+        </div>
+        <a class="btn-ghost small-btn" routerLink="/dashboard/owner/bookings">Open queue</a>
+      </div>
+
+      <div class="empty-state" *ngIf="!isLoading && recentBookings.length === 0">
+        <h3>No bookings yet</h3>
+        <p>Once guests start reserving your spaces, the latest activity will appear here.</p>
+      </div>
+
+      <div class="activity-list" *ngIf="!isLoading && recentBookings.length > 0">
+        <article class="activity-item" *ngFor="let booking of recentBookings">
+          <div>
+            <h3>{{ booking.space_name }}</h3>
+            <p>{{ booking.user_name }} • {{ booking.start_date | date: 'mediumDate' }}</p>
+          </div>
+          <span class="status-pill" [ngClass]="booking.status">{{ booking.status }}</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="surface-card">
+      <div class="page-header compact">
+        <div>
+          <p class="eyebrow">Revenue snapshot</p>
+          <h2 class="section-title">Performance at a glance</h2>
+        </div>
+      </div>
+
+      <div class="card-stack performance-list">
+        <div class="performance-item">
+          <span>Completed bookings</span>
+          <strong>{{ completedBookingsCount }}</strong>
+        </div>
+        <div class="performance-item">
+          <span>Total earnings</span>
+          <strong>{{ totalEarnings | currency:'INR':'symbol':'1.0-0':'en-IN' }}</strong>
+        </div>
+        <div class="performance-item">
+          <span>Average earning per space</span>
+          <strong>
+            {{ spaces.length ? (totalEarnings / spaces.length | currency:'INR':'symbol':'1.0-0':'en-IN') : '₹0' }}
+          </strong>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <section class="surface-card">
+    <div class="page-header compact">
+      <div>
+        <p class="eyebrow">Portfolio list</p>
+        <h2 class="section-title">Your spaces</h2>
+        <p class="section-copy">Edit, review, or remove individual listings from this grid.</p>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="empty-state">
+      <h3>Loading your spaces</h3>
+      <p>Portfolio details are being prepared.</p>
+    </div>
+
+    <div *ngIf="!isLoading && spaces.length === 0" class="empty-state">
+      <h3>No spaces created yet</h3>
+      <p>Add your first listing to start receiving bookings.</p>
+    </div>
+
+    <div class="cards-container" *ngIf="!isLoading && spaces.length > 0">
+      <article class="space-card" *ngFor="let space of spaces">
+        <div class="space-head">
+          <div>
+            <h3>{{ space.space_name }}</h3>
+            <p>{{ space.location }}</p>
+          </div>
+          <span class="status-pill" [ngClass]="getSpaceStatus(space)">
+            {{ getSpaceStatus(space) }}
+          </span>
+        </div>
+
+        <div class="chip-row">
+          <span class="chip neutral">{{ formatSpaceType(space.space_type) }}</span>
+          <span class="chip info">{{ space.max_capacity }} seats</span>
+        </div>
+
+        <p class="space-description">
+          {{ space.description || 'Designed for flexible teams, focus sessions, and collaborative work.' }}
+        </p>
+
+        <div class="card-actions">
+          <a class="btn-ghost action-btn" [routerLink]="['/dashboard/owner/edit-space', space.space_id]">Edit</a>
+          <button class="btn-danger action-btn" type="button" (click)="deleteSpace(space.space_id)">Delete</button>
+        </div>
+      </article>
+    </div>
+  </section>
 </div>

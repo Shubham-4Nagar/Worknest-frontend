@@ -1,26 +1,40 @@
-<div class="page">
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Listing moderation</p>
+      <h2>Manage pending spaces</h2>
+      <p class="page-copy">Approve polished listings and keep low-quality or incomplete entries from going live.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip neutral">{{ spaces.length }} pending spaces</span>
+    </div>
+  </section>
 
-  <h2>Manage Spaces</h2>
-
-  <!-- Loading -->
-  <div *ngIf="isLoading" class="loading">
-    Loading spaces...
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading spaces</h3>
+    <p>The moderation queue is being prepared.</p>
   </div>
 
-  <!-- Empty State -->
-  <div *ngIf="!isLoading && spaces.length === 0" class="empty">
-    No pending spaces.
+  <div *ngIf="!isLoading && spaces.length === 0" class="empty-state">
+    <h3>No pending spaces</h3>
+    <p>Fresh listings will appear here when they need review.</p>
   </div>
 
-  <!-- Table -->
-  <div *ngIf="!isLoading && spaces.length > 0" class="table-wrapper">
+  <div *ngIf="!isLoading && spaces.length > 0" class="table-surface">
+    <div class="table-header">
+      <div>
+        <h3>Moderation queue</h3>
+        <p class="muted-copy">Review ownership, readiness, and listing details before approval.</p>
+      </div>
+    </div>
 
-    <table>
+    <table class="data-table">
       <thead>
         <tr>
-          <th>Space Name</th>
+          <th>Space name</th>
           <th>Location</th>
           <th>Owner ID</th>
+          <th>Type</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
@@ -31,26 +45,20 @@
           <td>{{ space.space_name }}</td>
           <td>{{ space.location }}</td>
           <td>{{ space.owner_id }}</td>
-
+          <td>{{ space.space_type || 'Workspace' }}</td>
           <td>
-            <span class="badge pending">Pending</span>
+            <span class="status-pill pending">Pending</span>
           </td>
-
           <td class="actions">
-            <button class="approve"
-              (click)="updateSpace(space.space_id, 'active')">
+            <button class="btn-primary compact-btn" type="button" (click)="updateSpace(space.space_id, 'active')">
               Approve
             </button>
-
-            <button class="reject"
-              (click)="updateSpace(space.space_id, 'inactive')">
+            <button class="btn-danger compact-btn" type="button" (click)="updateSpace(space.space_id, 'inactive')">
               Deactivate
             </button>
           </td>
         </tr>
       </tbody>
     </table>
-
   </div>
-
 </div>

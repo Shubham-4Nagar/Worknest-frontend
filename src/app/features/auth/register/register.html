@@ -1,50 +1,57 @@
-<div class="register-container">
-
-  <div class="register-card">
-
-    <h2>Create Account</h2>
-
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-
-      <div class="form-group">
-        <label>First Name</label>
-        <input type="text" formControlName="first_name" />
-      </div>
-
-      <div class="form-group">
-        <label>Last Name</label>
-        <input type="text" formControlName="last_name" />
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" formControlName="email" />
-      </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" formControlName="password" />
-      </div>
-
-      <button type="submit" [disabled]="registerForm.invalid">
-        Register
-      </button>
-
-      <p class="success" *ngIf="successMessage">
-        {{ successMessage }}
+<div class="auth-shell register-shell">
+  <section class="auth-stage register-stage">
+    <div class="auth-copy">
+      <p class="eyebrow">Join Worknest</p>
+      <h1>Create your account and start using the redesigned experience.</h1>
+      <p>
+        Register once and move into the right dashboard for discovering spaces,
+        hosting listings, or managing the marketplace.
       </p>
+    </div>
+  </section>
 
-      <p class="error" *ngIf="errorMessage">
-        {{ errorMessage }}
+  <section class="auth-panel">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Create account</h2>
+        <p>Set up your Worknest profile in a minute.</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="field-grid">
+          <div class="field">
+            <label>First name</label>
+            <input type="text" formControlName="first_name" />
+          </div>
+
+          <div class="field">
+            <label>Last name</label>
+            <input type="text" formControlName="last_name" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" formControlName="email" />
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input type="password" formControlName="password" />
+        </div>
+
+        <button class="btn-primary auth-submit" type="submit" [disabled]="registerForm.invalid">
+          Create account
+        </button>
+
+        <p class="success-text" *ngIf="successMessage">{{ successMessage }}</p>
+        <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </form>
+
+      <p class="auth-footer">
+        Already have an account?
+        <a routerLink="/login">Login</a>
       </p>
-
-    </form>
-
-    <p class="login-link">
-      Already have an account?
-      <a routerLink="/login">Login</a>
-    </p>
-
-  </div>
-
+    </div>
+  </section>
 </div>

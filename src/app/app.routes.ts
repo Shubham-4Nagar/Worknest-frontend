@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { roleGuard } from "./core/guards/role.guard";
+import { authGuard } from "./core/guards/auth.guard";
 
 export const routes:Routes =[
   //Landing Page
@@ -26,11 +27,18 @@ export const routes:Routes =[
   //Dashboard (Parent)
   {
     path:'dashboard',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./layouts/dashboard-layout/dashboard-layout')
     .then(m => m.DashboardLayout),
 
     children: [
+      {
+        path:'profile',
+        loadComponent: () =>
+          import('./features/dashboard/profile/profile')
+        .then(m => m.ProfilePage)
+      },
       //ADMIN Routes
       {
         path:'admin',

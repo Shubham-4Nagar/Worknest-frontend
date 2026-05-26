@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NgIf, NgFor } from '@angular/common';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { BookingService, OwnerBooking } 
   from '../../../../core/services/booking.service';
 
 @Component({
   selector: 'app-owner-bookings',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, NgClass, DatePipe],
   templateUrl: './owner-bookings.html',
   styleUrl: './owner-booking.css'
 })

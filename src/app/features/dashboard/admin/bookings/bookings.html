@@ -1,1 +1,76 @@
-<p>bookings works!</p>
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Reservation analytics</p>
+      <h2>Marketplace bookings</h2>
+      <p class="page-copy">Filter booking activity across the platform to spot demand, risk, and volume trends.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip neutral">{{ bookings.length }} bookings</span>
+      <span class="chip info">{{ getStatusCount('pending') }} pending</span>
+      <span class="chip success">{{ getStatusCount('confirmed') }} confirmed</span>
+    </div>
+  </section>
+
+  <section class="surface-card">
+    <div class="toolbar-row">
+      <input
+        class="toolbar-input"
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by space or user"
+      />
+      <select class="toolbar-input" [(ngModel)]="selectedStatus">
+        <option value="All">All statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Cancelled">Cancelled</option>
+        <option value="Completed">Completed</option>
+      </select>
+      <span class="chip neutral">Revenue {{ getTotalRevenue() | currency:'INR':'symbol':'1.0-0':'en-IN' }}</span>
+    </div>
+  </section>
+
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading bookings</h3>
+    <p>The platform reservation feed is being prepared.</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredBookings.length === 0" class="empty-state">
+    <h3>No bookings found</h3>
+    <p>Try widening the search or changing the status filter.</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredBookings.length > 0" class="table-surface">
+    <div class="table-header">
+      <div>
+        <h3>Reservation feed</h3>
+        <p class="muted-copy">Platform-wide booking activity, status, and amount collected.</p>
+      </div>
+    </div>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Space</th>
+          <th>User</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let booking of filteredBookings">
+          <td>{{ booking.space_name || booking.space_id }}</td>
+          <td>{{ booking.user_name || booking.user_id || 'User' }}</td>
+          <td>{{ getDisplayDate(booking) ? (getDisplayDate(booking) | date:'mediumDate') : 'Pending' }}</td>
+          <td>
+            <span class="status-pill" [ngClass]="(booking.status || 'pending').toLowerCase()">
+              {{ booking.status || 'pending' }}
+            </span>
+          </td>
+          <td>{{ booking.total_amount ? (booking.total_amount | currency:'INR':'symbol':'1.0-0':'en-IN') : 'Pending' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

@@ -1,107 +1,68 @@
-.page-title {
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 600;
-}
-
 .tabs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .tabs button {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: #e5e7eb;
-  font-weight: 500;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  font-weight: 700;
 }
 
 .tabs button.active {
-  background: #2563eb;
-  color: white;
+  background: var(--primary);
+  color: #fff;
 }
 
-.tabs button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.booking-grid,
+.booking-card {
+  display: grid;
+  gap: 1rem;
 }
 
-.loading {
-  font-size: 16px;
-  padding: 20px 0;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px 0;
-  color: #6b7280;
+.booking-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .booking-card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
+  padding: 1.35rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--shadow-soft);
 }
 
-.booking-card:hover {
-  transform: translateY(-2px);
-}
-
-.card-header {
+.card-header,
+.actions {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
+  gap: 1rem;
+  align-items: flex-start;
 }
 
-.status-badge {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  text-transform: capitalize;
+.card-header h3 {
+  margin: 0;
 }
 
-.status-badge.pending {
-  background: #facc15;
-  color: #92400e;
+.card-header p {
+  margin: 0.45rem 0 0;
+  color: var(--text-muted);
 }
 
-.card-body p {
-  margin: 6px 0;
+.card-body {
+  display: grid;
+  gap: 0.9rem;
 }
 
-.amount {
-  font-size: 18px;
-  font-weight: 600;
-  margin-top: 8px;
-}
-
-.actions {
-  margin-top: 15px;
-  display: flex;
-  gap: 10px;
+.info-pair strong {
+  display: block;
+  margin-top: 0.2rem;
 }
 
 .actions button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.actions .approve {
-  background: #16a34a;
-  color: white;
-}
-
-.actions .reject {
-  background: #dc2626;
-  color: white;
+  flex: 1;
+  justify-content: center;
 }

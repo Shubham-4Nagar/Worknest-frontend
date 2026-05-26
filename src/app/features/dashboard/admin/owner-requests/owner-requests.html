@@ -1,50 +1,68 @@
 <div class="page">
+  <div class="page-shell">
+    <section class="page-header">
+      <div>
+        <p class="eyebrow">Verification queue</p>
+        <h2>Owner requests</h2>
+        <p class="page-copy">Approve trusted hosts quickly so inventory can go live without friction.</p>
+      </div>
+      <div class="chip-row">
+        <span class="chip info">{{ owners.length }} pending</span>
+        <span class="chip neutral" *ngIf="newestRequest">Newest {{ newestRequest | date:'mediumDate' }}</span>
+      </div>
+    </section>
 
-  <h2>Owner Requests</h2>
+    <div *ngIf="isLoading" class="empty-state">
+      <h3>Loading requests</h3>
+      <p>The verification queue is being prepared.</p>
+    </div>
 
-  <!-- Loading -->
-  <div *ngIf="isLoading" class="loading">
-    Loading requests...
+    <div *ngIf="!isLoading && owners.length === 0" class="empty-state">
+      <h3>No pending owner requests</h3>
+      <p>Once users apply to host spaces, requests will appear here.</p>
+    </div>
+
+    <div *ngIf="!isLoading && owners.length > 0" class="table-surface">
+      <div class="table-header">
+        <div>
+          <h3>Review queue</h3>
+          <p class="muted-copy">Use approve or reject to move requests through verification.</p>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Requested at</th>
+            <th>Proof</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let owner of owners">
+            <td>{{ owner.name || ((owner.first_name || '') + ' ' + (owner.last_name || '')) }}</td>
+            <td>{{ owner.email }}</td>
+            <td>{{ owner.created_at | date:'medium' }}</td>
+            <td>
+              <a *ngIf="owner.id_proof" class="btn-ghost inline-btn" [href]="owner.id_proof" target="_blank" rel="noopener">
+                Open proof
+              </a>
+              <span *ngIf="!owner.id_proof" class="muted-copy">Not provided</span>
+            </td>
+            <td class="actions">
+              <button class="btn-primary compact-btn" type="button" (click)="updateOwnerStatus(owner.user_id, 'approved')">
+                Approve
+              </button>
+              <button class="btn-danger compact-btn" type="button" (click)="updateOwnerStatus(owner.user_id, 'rejected')">
+                Reject
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
-  <!-- Empty State -->
-  <div *ngIf="!isLoading && owners.length === 0" class="empty">
-    No pending owner requests.
-  </div>
-
-  <!-- Table -->
-  <div *ngIf="!isLoading && owners.length > 0" class="table-wrapper">
-
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Requested At</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let owner of owners">
-          <td>{{ owner.name }}</td>
-          <td>{{ owner.email }}</td>
-          <td>{{ owner.created_at | date:'medium' }}</td>
-          <td class="actions">
-            <button class="approve"
-              (click)="updateOwnerStatus(owner.user_id, 'approved')">
-              Approve
-            </button>
-
-            <button class="reject"
-              (click)="updateOwnerStatus(owner.user_id, 'rejected')">
-              Reject
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-
 </div>

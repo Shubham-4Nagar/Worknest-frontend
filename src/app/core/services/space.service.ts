@@ -16,7 +16,6 @@ export class SpaceService {
     //Method to attach JWT token for access 
     private getAuthHeaders():HttpHeaders{
         const token = localStorage.getItem('token');
-        console.log("Token:", token); 
 
         return new HttpHeaders({
             Authorization: `Bearer ${token}`
@@ -103,5 +102,4 @@ export class SpaceService {
     );
   }
 }
-
 

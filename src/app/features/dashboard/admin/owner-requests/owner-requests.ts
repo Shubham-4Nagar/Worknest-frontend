@@ -34,4 +34,8 @@ export class OwnerRequests implements OnInit {
       this.loadPendingOwners(); 
     });
   }
+
+  get newestRequest(): string | null {
+    return this.owners[0]?.created_at || null;
+  }
 }

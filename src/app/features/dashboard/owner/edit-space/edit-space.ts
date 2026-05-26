@@ -15,7 +15,15 @@ export class EditSpace implements OnInit {
 
   spaceId!: string;
   isLoading = true;
+  isSaving = false;
+  message = '';
   editForm!: FormGroup;
+  spaceTypes = [
+    { label: 'Private Cabin', value: 'private_cabin' },
+    { label: 'Hot Desk', value: 'hot_desk' },
+    { label: 'Meeting Room', value: 'meeting_room' },
+    { label: 'Event Space', value: 'event_space' }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -31,7 +39,8 @@ export class EditSpace implements OnInit {
       space_name: ['', Validators.required],
       location: ['', Validators.required],
       max_capacity: ['', [Validators.required, Validators.min(1)]],
-      space_type: ['', Validators.required]
+      space_type: ['', Validators.required],
+      description: ['']
     });
 
     //Get ID
@@ -53,31 +62,35 @@ export class EditSpace implements OnInit {
           space_name: space.space_name,
           location: space.location,
           max_capacity: space.max_capacity,
-          space_type: space.space_type
+          space_type: space.space_type,
+          description: space.description ?? ''
         });
 
         this.isLoading = false;
       },
       error: (err) => {
         console.error(err);
-        alert("Failed to load space");
         this.router.navigate(['/dashboard/owner/spaces']);
       }
     });
   }
 
   onSubmit() {
-    if (this.editForm.invalid) return;
+    if (this.editForm.invalid || this.isSaving) return;
+
+    this.isSaving = true;
+    this.message = '';
 
     this.spaceService.updateSpaces(this.spaceId, this.editForm.value)
       .subscribe({
         next: () => {
-          alert("Space updated successfully");
+          this.message = 'Space updated successfully';
           this.router.navigate(['/dashboard/owner/spaces']);
         },
         error: (err) => {
           console.error(err);
-          alert("Update failed");
+          this.message = 'Update failed';
+          this.isSaving = false;
         }
       });
   }

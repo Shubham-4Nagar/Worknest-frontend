@@ -1,56 +1,81 @@
-<div class="container">
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Bookings center</p>
+      <h2>Manage your reservations</h2>
+      <p class="page-copy">Create new bookings, review status changes, and cancel when plans move.</p>
+    </div>
+    <div class="chip-row">
+      <span class="chip neutral">{{ bookings.length }} total</span>
+      <span class="chip success">{{ getStatusCount('confirmed') }} confirmed</span>
+      <span class="chip info">{{ getStatusCount('pending') }} pending</span>
+    </div>
+  </section>
 
-  <h2>My Bookings</h2>
-
-
-  <!-- Create Booking -->
-  <div *ngIf="spaceId" class="booking-form">
-
-    <h3>Create Booking</h3>
-
-    <label>Select Date</label>
-
-    <input
-      type="date"
-      [(ngModel)]="bookingDate"
-    >
-
-    <button
-      (click)="createBooking()"
-      [disabled]="isCreating"
-    >
-      Confirm Booking
-    </button>
-
-  </div>
-
-
-  <p class="message">{{ message }}</p>
-
-
-  <!-- Loading -->
-  <div *ngIf="isLoading">
-    Loading bookings...
-  </div>
-
-
-  <!-- Booking list -->
-  <div *ngIf="!isLoading">
-
-    <div *ngFor="let booking of bookings" class="card">
-
-      <h4>{{ booking.space_name }}</h4>
-
-      <p>Date: {{ booking.booking_date }}</p>
-
-      <p>Status:
-        <span class="status">
-          {{ booking.status }}
-        </span>
-      </p>
-
+  <section class="surface-card booking-form-shell" *ngIf="spaceId">
+    <div>
+      <p class="eyebrow">New reservation</p>
+      <h3 class="section-title">Complete this booking</h3>
+      <p class="section-copy">Pick a booking date to reserve the selected workspace.</p>
     </div>
 
+    <div class="booking-form">
+      <input type="date" [(ngModel)]="bookingDate" [min]="minDate" />
+      <button class="btn-primary" type="button" (click)="createBooking()" [disabled]="isCreating">
+        {{ isCreating ? 'Confirming...' : 'Confirm booking' }}
+      </button>
+    </div>
+  </section>
+
+  <p class="success-text" *ngIf="message && !message.toLowerCase().includes('failed') && !message.toLowerCase().includes('unable')">
+    {{ message }}
+  </p>
+  <p class="error-text" *ngIf="message && (message.toLowerCase().includes('failed') || message.toLowerCase().includes('unable'))">
+    {{ message }}
+  </p>
+
+  <div class="empty-state" *ngIf="isLoading">
+    <h3>Loading bookings</h3>
+    <p>Your reservation history is on the way.</p>
   </div>
 
+  <div class="empty-state" *ngIf="!isLoading && bookings.length === 0">
+    <h3>No bookings yet</h3>
+    <p>Reserve a workspace from the browse page and it will appear here.</p>
+  </div>
+
+  <section class="booking-list" *ngIf="!isLoading && bookings.length > 0">
+    <article *ngFor="let booking of bookings" class="booking-card">
+      <div class="card-top">
+        <div>
+          <h3>{{ booking.space_name }}</h3>
+          <p>{{ getDisplayDate(booking) }}</p>
+        </div>
+        <span class="status-pill" [ngClass]="booking.status.toLowerCase()">
+          {{ booking.status }}
+        </span>
+      </div>
+
+      <div class="detail-grid">
+        <div>
+          <span class="metric-label">Booking type</span>
+          <strong>{{ booking.booking_type || 'Workspace booking' }}</strong>
+        </div>
+        <div>
+          <span class="metric-label">Amount</span>
+          <strong>{{ booking.total_amount ? (booking.total_amount | currency:'INR':'symbol':'1.0-0':'en-IN') : 'Pending confirmation' }}</strong>
+        </div>
+      </div>
+
+      <button
+        *ngIf="booking.status.toLowerCase() === 'pending' || booking.status.toLowerCase() === 'confirmed'"
+        class="btn-danger cancel-btn"
+        type="button"
+        (click)="cancelBooking(booking.booking_id)"
+        [disabled]="isCancelling"
+      >
+        {{ isCancelling ? 'Cancelling...' : 'Cancel booking' }}
+      </button>
+    </article>
+  </section>
 </div>

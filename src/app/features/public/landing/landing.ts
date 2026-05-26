@@ -1,17 +1,15 @@
 import { Component } from "@angular/core";
-import { RouterLink, Router } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { NgFor } from "@angular/common";
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgFor],
   templateUrl: './landing.html',
   styleUrl: './landing.css'
 })
 export class Landing {
-
-  constructor(private router: Router) {}
 
   spaceTypes = [
     {
@@ -40,7 +38,9 @@ export class Landing {
     }
   ];
 
-  exploreSpace(type: string) {
-    this.router.navigate(['/spaces'], { queryParams: { type } });
-  }
+  stats = [
+    { value: '4+', label: 'workspace formats' },
+    { value: '24/7', label: 'booking-ready discovery' },
+    { value: '1', label: 'unified ops dashboard' },
+  ];
 }

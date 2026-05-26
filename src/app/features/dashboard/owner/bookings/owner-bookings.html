@@ -1,90 +1,74 @@
-<h2 class="page-title">Bookings</h2>
+<div class="page-shell">
+  <section class="page-header">
+    <div>
+      <p class="eyebrow">Booking operations</p>
+      <h2>Review and respond to guest bookings</h2>
+      <p class="page-copy">Switch between booking states to keep approvals and schedule management under control.</p>
+    </div>
+  </section>
 
-<!-- Status Tabs -->
-<div class="tabs">
+  <section class="surface-card">
+    <div class="tabs">
+      <button [class.active]="activeStatus === 'pending'" (click)="changeStatus('pending')">
+        Pending ({{ getCount('pending') }})
+      </button>
+      <button [class.active]="activeStatus === 'confirmed'" (click)="changeStatus('confirmed')">
+        Confirmed ({{ getCount('confirmed') }})
+      </button>
+      <button [class.active]="activeStatus === 'cancelled'" (click)="changeStatus('cancelled')">
+        Cancelled ({{ getCount('cancelled') }})
+      </button>
+      <button [class.active]="activeStatus === 'completed'" (click)="changeStatus('completed')">
+        Completed ({{ getCount('completed') }})
+      </button>
+    </div>
+  </section>
 
-  <button
-    [class.active]="activeStatus === 'pending'"
-    (click)="changeStatus('pending')">
-    Pending ({{ getCount('pending') }})
-  </button>
-
-  <button
-    [class.active]="activeStatus === 'confirmed'"
-    (click)="changeStatus('confirmed')">
-    Confirmed ({{ getCount('confirmed') }})
-  </button>
-
-  <button
-    [class.active]="activeStatus === 'cancelled'"
-    (click)="changeStatus('cancelled')">
-    Cancelled ({{ getCount('cancelled') }})
-  </button>
-
-  <button
-    [class.active]="activeStatus === 'completed'"
-    (click)="changeStatus('completed')">
-    Completed ({{ getCount('completed') }})
-  </button>
-
-</div>
-
-<!-- Loading -->
-<div *ngIf="isLoading" class="loading">
-  Loading bookings...
-</div>
-
-<!-- Empty State -->
-<div *ngIf="!isLoading && filteredBookings.length === 0"
-     class="empty-state">
-  <h3>No {{ activeStatus }} bookings</h3>
-  <p>Bookings will appear here.</p>
-</div>
-
-<!-- Booking Cards -->
-<div *ngFor="let booking of filteredBookings"
-     class="booking-card">
-
-  <div class="card-header">
-    <h3>{{ booking.space_name }}</h3>
-    <span class="status-badge">
-      {{ booking.status }}
-    </span>
+  <div *ngIf="isLoading" class="empty-state">
+    <h3>Loading bookings</h3>
+    <p>Owner reservation activity is being prepared.</p>
   </div>
 
-  <div class="card-body">
-    <p><strong>User:</strong> {{ booking.user_name }}</p>
-    <p><strong>Type:</strong> {{ booking.booking_type }}</p>
-
-    <p>
-      <strong>Duration:</strong>
-      {{ booking.start_date }}
-      →
-      {{ booking.end_date }}
-    </p>
-
-    <p><strong>People:</strong>
-      {{ booking.number_of_people }}
-    </p>
-
-    <p class="amount">
-      ₹ {{ booking.total_amount }}
-    </p>
+  <div *ngIf="!isLoading && filteredBookings.length === 0" class="empty-state">
+    <h3>No {{ activeStatus }} bookings</h3>
+    <p>Bookings will appear here as guests start reserving your spaces.</p>
   </div>
 
-  <div class="actions"
-       *ngIf="booking.status === 'pending'">
+  <div class="booking-grid" *ngIf="!isLoading && filteredBookings.length > 0">
+    <article *ngFor="let booking of filteredBookings" class="booking-card">
+      <div class="card-header">
+        <div>
+          <h3>{{ booking.space_name }}</h3>
+          <p>{{ booking.user_name }} • {{ booking.booking_type }}</p>
+        </div>
+        <span class="status-pill" [ngClass]="booking.status">
+          {{ booking.status }}
+        </span>
+      </div>
 
-    <button class="approve"
-      (click)="updateStatus(booking.booking_id, 'confirmed')">
-      Approve
-    </button>
+      <div class="card-body">
+        <div class="info-pair">
+          <span class="metric-label">Duration</span>
+          <strong>{{ booking.start_date | date: 'mediumDate' }} to {{ booking.end_date | date: 'mediumDate' }}</strong>
+        </div>
+        <div class="info-pair">
+          <span class="metric-label">Guest count</span>
+          <strong>{{ booking.number_of_people }} people</strong>
+        </div>
+        <div class="info-pair">
+          <span class="metric-label">Value</span>
+          <strong>₹ {{ booking.total_amount }}</strong>
+        </div>
+      </div>
 
-    <button class="reject"
-      (click)="updateStatus(booking.booking_id, 'cancelled')">
-      Reject
-    </button>
-
+      <div class="actions" *ngIf="booking.status === 'pending'">
+        <button class="btn-primary" type="button" (click)="updateStatus(booking.booking_id, 'confirmed')">
+          Approve
+        </button>
+        <button class="btn-danger" type="button" (click)="updateStatus(booking.booking_id, 'cancelled')">
+          Reject
+        </button>
+      </div>
+    </article>
   </div>
-
 </div>
