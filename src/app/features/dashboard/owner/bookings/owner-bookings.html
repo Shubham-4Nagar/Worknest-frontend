@@ -1,4 +1,5 @@
 <div class="page-shell">
+
   <section class="page-header">
     <div>
       <p class="eyebrow">Booking operations</p>
@@ -7,68 +8,88 @@
     </div>
   </section>
 
-  <section class="surface-card">
+  <!-- Tab bar -->
+  <section class="surface-card tabs-card">
     <div class="tabs">
-      <button [class.active]="activeStatus === 'pending'" (click)="changeStatus('pending')">
-        Pending ({{ getCount('pending') }})
-      </button>
-      <button [class.active]="activeStatus === 'confirmed'" (click)="changeStatus('confirmed')">
-        Confirmed ({{ getCount('confirmed') }})
-      </button>
-      <button [class.active]="activeStatus === 'cancelled'" (click)="changeStatus('cancelled')">
-        Cancelled ({{ getCount('cancelled') }})
-      </button>
-      <button [class.active]="activeStatus === 'completed'" (click)="changeStatus('completed')">
-        Completed ({{ getCount('completed') }})
+      <button
+        *ngFor="let tab of tabs"
+        [class.active]="activeStatus === tab"
+        (click)="changeStatus(tab)"
+        type="button"
+      >
+        {{ tab | titlecase }}  ({{ getCount(tab) }})
       </button>
     </div>
   </section>
 
+  <!-- Loading -->
   <div *ngIf="isLoading" class="empty-state">
+    <div class="loader-ring"></div>
     <h3>Loading bookings</h3>
     <p>Owner reservation activity is being prepared.</p>
   </div>
 
+  <!-- Empty -->
   <div *ngIf="!isLoading && filteredBookings.length === 0" class="empty-state">
+    <div class="empty-icon">📭</div>
     <h3>No {{ activeStatus }} bookings</h3>
     <p>Bookings will appear here as guests start reserving your spaces.</p>
   </div>
 
+  <!-- Cards -->
   <div class="booking-grid" *ngIf="!isLoading && filteredBookings.length > 0">
     <article *ngFor="let booking of filteredBookings" class="booking-card">
+
       <div class="card-header">
         <div>
           <h3>{{ booking.space_name }}</h3>
-          <p>{{ booking.user_name }} • {{ booking.booking_type }}</p>
+          <p>{{ booking.user_name }} · {{ booking.booking_type }}</p>
         </div>
-        <span class="status-pill" [ngClass]="booking.status">
-          {{ booking.status }}
-        </span>
+        <span class="status-pill" [ngClass]="booking.status">{{ booking.status }}</span>
       </div>
 
       <div class="card-body">
         <div class="info-pair">
           <span class="metric-label">Duration</span>
-          <strong>{{ booking.start_date | date: 'mediumDate' }} to {{ booking.end_date | date: 'mediumDate' }}</strong>
+          <strong>
+            {{ booking.start_date | date:'mediumDate' }}
+            → {{ booking.end_date | date:'mediumDate' }}
+          </strong>
         </div>
         <div class="info-pair">
-          <span class="metric-label">Guest count</span>
+          <span class="metric-label">Guests</span>
           <strong>{{ booking.number_of_people }} people</strong>
         </div>
         <div class="info-pair">
           <span class="metric-label">Value</span>
+<<<<<<< HEAD
           <strong>₹ {{ booking.total_amount }}</strong>
+=======
+          <strong>{{ booking.total_amount | currency:'INR':'symbol':'1.0-0':'en-IN' }}</strong>
+>>>>>>> 9748933 (Changes in the UI)
         </div>
       </div>
 
       <div class="actions" *ngIf="booking.status === 'pending'">
-        <button class="btn-primary" type="button" (click)="updateStatus(booking.booking_id, 'confirmed')">
-          Approve
+        <button
+          class="btn-primary"
+          type="button"
+          (click)="updateStatus(booking.booking_id, 'confirmed')"
+          [disabled]="updatingId === booking.booking_id"
+        >
+          {{ updatingId === booking.booking_id ? 'Approving…' : 'Approve' }}
         </button>
-        <button class="btn-danger" type="button" (click)="updateStatus(booking.booking_id, 'cancelled')">
-          Reject
+        <button
+          class="btn-danger"
+          type="button"
+          (click)="updateStatus(booking.booking_id, 'cancelled')"
+          [disabled]="updatingId === booking.booking_id"
+        >
+          {{ updatingId === booking.booking_id ? 'Rejecting…' : 'Reject' }}
         </button>
       </div>
+
     </article>
   </div>
+
 </div>

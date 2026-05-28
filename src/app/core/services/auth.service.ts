@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 export interface LoginResponse {
   message: string;
@@ -25,11 +25,18 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, data);
   }
 
-  getCurrentUser (){
-    return this.http.get<any>(`${this.baseUrl}/me`);
+  // FIX: always send Authorization header so /auth/me doesn't 401
+  // causing a re-render loop and double data fetch on every page
+  getCurrentUser(): Observable<any> {
+    const token = this.getToken();
+    if (!token) {
+      return of(null);
+    }
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<any>(`${this.baseUrl}/me`, { headers });
   }
 
-  setUser(user:any){
+  setUser(user: any) {
     this.currentUserSubject.next(user);
   }
 

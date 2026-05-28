@@ -24,7 +24,6 @@ export class DashboardLayout implements OnInit {
   userName = 'Worknest member';
   userEmail = 'Open profile';
   isSidebarOpen = false;
-  isMobile = false;
 
   private readonly navConfig: Record<string, DashboardNavItem[]> = {
     User: [
@@ -139,21 +138,14 @@ export class DashboardLayout implements OnInit {
   }
 
   ngOnInit() {
-
-  this.checkScreen();
-
-  window.addEventListener('resize', () => {
-    this.checkScreen();
-  });
-
-  this.authService.getCurrentUser()
-    .pipe(catchError(() => of(null)))
-    .subscribe((user) => {
-      const firstName = user?.first_name || user?.name?.split(' ')?.[0];
-      this.userName = firstName || `${this.role || 'Worknest'} member`;
-      this.userEmail = user?.email || 'Open profile';
-    });
-}
+    this.authService.getCurrentUser()
+      .pipe(catchError(() => of(null)))
+      .subscribe((user) => {
+        const firstName = user?.first_name || user?.name?.split(' ')?.[0];
+        this.userName = firstName || `${this.role || 'Worknest'} member`;
+        this.userEmail = user?.email || 'Open profile';
+      });
+  }
 
   get userInitials(): string {
     return this.userName
@@ -198,9 +190,6 @@ export class DashboardLayout implements OnInit {
 
   closeSidebar() {
     this.isSidebarOpen = false;
-  }
-  checkScreen() {
-    this.isMobile = window.innerWidth <= 768;
   }
 
   logout(){

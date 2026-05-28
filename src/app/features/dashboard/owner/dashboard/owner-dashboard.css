@@ -63,3 +63,51 @@
   flex: 1;
   justify-content: center;
 }
+
+/* Ensure action buttons are always clickable - no z-index stacking issue */
+.space-card {
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.space-card:hover {
+  box-shadow: var(--shadow-strong);
+  transform: translateY(-2px);
+}
+
+.card-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.action-btn {
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.action-btn:active {
+  transform: scale(0.97);
+}
+
+/* KPI grid skeleton when loading */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* Loader ring */
+.loader-ring {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-strong);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -16,8 +16,9 @@ export class Login {
 
   errorMessage = '';
   isLoading = false;
-  loginForm!: FormGroup; 
+  loginForm!: FormGroup;
   submitted = false;
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -30,12 +31,13 @@ export class Login {
     });
   }
 
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   onSubmit() {
-
     if (this.isLoading) return;
-
     this.submitted = true;
-
     if (this.loginForm.invalid) return;
 
     this.isLoading = true;
@@ -43,30 +45,27 @@ export class Login {
 
     this.authService.login(this.loginForm.value).pipe(
       finalize(() => this.isLoading = false)
-    )
-    .subscribe({
+    ).subscribe({
       next: (res) => {
         this.authService.saveAuthData(res);
-        if(res.role === 'Owner'){
+        if (res.role === 'Owner') {
           localStorage.setItem('ownerApproved', 'true');
         }
         this.redirectByRole(res.role);
       },
-      error: () => {
-        this.errorMessage = 'Invalid email or password';
+      error: (err) => {
+        const msg = err?.error?.message || err?.error?.error;
+        this.errorMessage = msg || 'Invalid email or password';
       }
     });
   }
 
   redirectByRole(role: string) {
-
     if (role === 'Admin') {
       this.router.navigate(['/dashboard/admin']);
-    }
-    else if (role === 'Owner') {
+    } else if (role === 'Owner') {
       this.router.navigate(['/dashboard/owner']);
-    }
-    else {
+    } else {
       this.router.navigate(['/dashboard/user']);
     }
   }

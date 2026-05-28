@@ -1,4 +1,6 @@
 <div class="page-shell">
+
+  <!-- Header -->
   <section class="page-header">
     <div>
       <p class="eyebrow">Bookings center</p>
@@ -12,44 +14,64 @@
     </div>
   </section>
 
+  <!-- New booking form (only when arriving from Browse Spaces) -->
   <section class="surface-card booking-form-shell" *ngIf="spaceId">
     <div>
       <p class="eyebrow">New reservation</p>
       <h3 class="section-title">Complete this booking</h3>
       <p class="section-copy">Pick a booking date to reserve the selected workspace.</p>
     </div>
-
     <div class="booking-form">
-      <input type="date" [(ngModel)]="bookingDate" [min]="minDate" />
-      <button class="btn-primary" type="button" (click)="createBooking()" [disabled]="isCreating">
+      <input
+        type="date"
+        [(ngModel)]="bookingDate"
+        [min]="minDate"
+        aria-label="Booking date"
+      />
+      <button
+        class="btn-primary"
+        type="button"
+        (click)="createBooking()"
+        [disabled]="isCreating || !bookingDate"
+      >
         {{ isCreating ? 'Confirming...' : 'Confirm booking' }}
       </button>
     </div>
   </section>
 
-  <p class="success-text" *ngIf="message && !message.toLowerCase().includes('failed') && !message.toLowerCase().includes('unable')">
-    {{ message }}
-  </p>
-  <p class="error-text" *ngIf="message && (message.toLowerCase().includes('failed') || message.toLowerCase().includes('unable'))">
-    {{ message }}
-  </p>
+  <!-- Toast message -->
+  <p
+    class="success-text"
+    *ngIf="message && messageType === 'success'"
+    role="status"
+  >✓ {{ message }}</p>
+  <p
+    class="error-text"
+    *ngIf="message && messageType === 'error'"
+    role="alert"
+  >✗ {{ message }}</p>
 
+  <!-- Loading skeleton -->
   <div class="empty-state" *ngIf="isLoading">
+    <div class="loader-ring"></div>
     <h3>Loading bookings</h3>
     <p>Your reservation history is on the way.</p>
   </div>
 
+  <!-- Empty state -->
   <div class="empty-state" *ngIf="!isLoading && bookings.length === 0">
+    <div class="empty-icon">📋</div>
     <h3>No bookings yet</h3>
-    <p>Reserve a workspace from the browse page and it will appear here.</p>
+    <p>Reserve a workspace from the Browse Spaces page and it will appear here.</p>
   </div>
 
+  <!-- Booking cards -->
   <section class="booking-list" *ngIf="!isLoading && bookings.length > 0">
     <article *ngFor="let booking of bookings" class="booking-card">
       <div class="card-top">
         <div>
           <h3>{{ booking.space_name }}</h3>
-          <p>{{ getDisplayDate(booking) }}</p>
+          <p class="booking-date">{{ getDisplayDate(booking) }}</p>
         </div>
         <span class="status-pill" [ngClass]="booking.status.toLowerCase()">
           {{ booking.status }}
@@ -63,7 +85,11 @@
         </div>
         <div>
           <span class="metric-label">Amount</span>
-          <strong>{{ booking.total_amount ? (booking.total_amount | currency:'INR':'symbol':'1.0-0':'en-IN') : 'Pending confirmation' }}</strong>
+          <strong>
+            {{ booking.total_amount
+                ? (booking.total_amount | currency:'INR':'symbol':'1.0-0':'en-IN')
+                : 'Pending confirmation' }}
+          </strong>
         </div>
       </div>
 
@@ -72,10 +98,11 @@
         class="btn-danger cancel-btn"
         type="button"
         (click)="cancelBooking(booking.booking_id)"
-        [disabled]="isCancelling"
+        [disabled]="cancellingId === booking.booking_id"
       >
-        {{ isCancelling ? 'Cancelling...' : 'Cancel booking' }}
+        {{ cancellingId === booking.booking_id ? 'Cancelling...' : 'Cancel booking' }}
       </button>
     </article>
   </section>
+
 </div>

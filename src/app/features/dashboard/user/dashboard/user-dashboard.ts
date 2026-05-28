@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { BookingService } from '../../../../core/services/booking.service';
 import { SpaceService } from '../../../../core/services/space.service';
-import { catchError, forkJoin, of } from 'rxjs';
+import { catchError, forkJoin, of, Subject, takeUntil } from 'rxjs';
 
 interface DashboardSpace {
   space_id: string;
@@ -32,13 +32,15 @@ interface DashboardBooking {
   templateUrl: './user-dashboard.html',
   styleUrl: './user-dashboard.css'
 })
-export class UserDashboard implements OnInit {
+export class UserDashboard implements OnInit, OnDestroy {
 
   firstName = 'there';
   role = '';
   spaces: DashboardSpace[] = [];
   bookings: DashboardBooking[] = [];
   isLoading = true;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private authService: AuthService,
@@ -50,15 +52,20 @@ export class UserDashboard implements OnInit {
     this.role = this.authService.getRole() || '';
 
     forkJoin({
-      user: this.authService.getCurrentUser().pipe(catchError(() => of(null))),
-      spaces: this.spaceService.getSpaces().pipe(catchError(() => of([]))),
+      user:     this.authService.getCurrentUser().pipe(catchError(() => of(null))),
+      spaces:   this.spaceService.getSpaces().pipe(catchError(() => of([]))),
       bookings: this.bookingService.getMyBookings().pipe(catchError(() => of([]))),
-    }).subscribe(({ user, spaces, bookings }) => {
+    }).pipe(takeUntil(this.destroy$)).subscribe(({ user, spaces, bookings }) => {
       this.firstName = user?.first_name || user?.name?.split(' ')?.[0] || 'there';
-      this.spaces = this.normalizeSpaces(spaces);
-      this.bookings = this.normalizeBookings(bookings);
+      this.spaces    = this.normalizeSpaces(spaces);
+      this.bookings  = this.normalizeBookings(bookings);
       this.isLoading = false;
     });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get activeBookingsCount(): number {

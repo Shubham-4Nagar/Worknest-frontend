@@ -1,87 +1,82 @@
-import { Component, OnInit } from '@angular/core';
-import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
-import { BookingService, OwnerBooking } 
-  from '../../../../core/services/booking.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CurrencyPipe, DatePipe, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { BookingService, OwnerBooking } from '../../../../core/services/booking.service';
+import { Subject, takeUntil } from 'rxjs';
+
+type StatusTab = 'pending' | 'confirmed' | 'cancelled' | 'completed';
 
 @Component({
   selector: 'app-owner-bookings',
   standalone: true,
-  imports: [NgIf, NgFor, NgClass, DatePipe],
+  imports: [NgIf, NgFor, NgClass, DatePipe, CurrencyPipe, TitleCasePipe],
   templateUrl: './owner-bookings.html',
   styleUrl: './owner-booking.css'
 })
-export class OwnerBookings implements OnInit {
+export class OwnerBookings implements OnInit, OnDestroy {
 
-  bookings: OwnerBooking[] = [];
+  bookings: OwnerBooking[]         = [];
   filteredBookings: OwnerBooking[] = [];
+  activeStatus: StatusTab          = 'pending';
+  tabs: StatusTab[] = [
+    'pending',
+    'confirmed',
+    'cancelled',
+    'completed'
+  ]
+  isLoading   = true;
+  updatingId: string | null        = null;
 
-  activeStatus: 'pending' | 'confirmed' | 'cancelled' | 'completed' = 'pending';
-
-  isLoading = true;
+  private destroy$ = new Subject<void>();
 
   constructor(private bookingService: BookingService) {}
 
-  ngOnInit() {
-    this.loadBookings();
+  ngOnInit() { this.loadBookings(); }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadBookings() {
-    this.bookingService.getOwnerBookings().subscribe({
+    this.isLoading = true;
+    this.bookingService.getOwnerBookings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
       next: (res: any) => {
-
-        // If backend returns { bookings: [...] }
-        this.bookings = res.bookings ?? res;
-
+        this.bookings = res?.bookings ?? (Array.isArray(res) ? res : []);
         this.filterBookings();
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Error loading bookings', err);
-        this.isLoading = false;
-      }
+      error: () => { this.isLoading = false; }
     });
   }
 
   filterBookings() {
-    this.filteredBookings = this.bookings.filter(
-      b => b.status === this.activeStatus
-    );
+    this.filteredBookings = this.bookings.filter(b => b.status === this.activeStatus);
   }
 
-  changeStatus(status: any) {
+  changeStatus(status: StatusTab) {
     this.activeStatus = status;
     this.filterBookings();
   }
 
-  updateStatus(
-    bookingId: string,
-    status: 'confirmed' | 'cancelled'
-  ) {
-    this.bookingService
-      .updateBookingStatus(bookingId, status)
-      .subscribe({
-        next: () => {
-
-          // Update locally
-          const booking = this.bookings.find(
-            b => b.booking_id === bookingId
-          );
-
-          if (booking) {
-            booking.status = status;
-          }
-
-          this.filterBookings();
-        },
-        error: (err) => {
-          console.error('Failed to update booking', err);
-        }
-      });
+  updateStatus(bookingId: string, status: 'confirmed' | 'cancelled') {
+    this.updatingId = bookingId;
+    this.bookingService.updateBookingStatus(bookingId, status).subscribe({
+      next: () => {
+        const booking = this.bookings.find(b => b.booking_id === bookingId);
+        if (booking) booking.status = status;
+        this.filterBookings();
+        this.updatingId = null;
+      },
+      error: (err) => {
+        console.error('Failed to update booking', err);
+        this.updatingId = null;
+      }
+    });
   }
 
   getCount(status: string) {
-    return this.bookings.filter(
-      b => b.status === status
-    ).length;
+    return this.bookings.filter(b => b.status === status).length;
   }
 }

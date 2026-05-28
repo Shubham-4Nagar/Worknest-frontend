@@ -16,24 +16,20 @@ export interface OwnerBooking {
   status: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class BookingService {
 
   private bookingBaseUrl = 'http://127.0.0.1:5000/bookings';
-  private ownerBaseUrl = 'http://127.0.0.1:5000/owner';
+  private ownerBaseUrl   = 'http://127.0.0.1:5000/owner';
 
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
-    return new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 
-  // USER ROUTES
+  // ── USER ────────────────────────────────────────────────────────────
 
   createBooking(data: any): Observable<any> {
     return this.http.post(
@@ -57,28 +53,32 @@ export class BookingService {
       { headers: this.getAuthHeaders() }
     );
   }
-  //OWNER ROUTES
 
-  getOwnerBookings(): Observable<OwnerBooking[]> {
-    return this.http.get<OwnerBooking[]>(
-      `http://127.0.0.1:5000/owner/bookings`,
-      {headers: this.getAuthHeaders()}
-    )
+  // ── OWNER ────────────────────────────────────────────────────────────
+
+  getOwnerBookings(): Observable<any> {
+    return this.http.get(
+      `${this.ownerBaseUrl}/bookings`,
+      { headers: this.getAuthHeaders() }
+    );
   }
+
+  // FIX: was hitting /owner/owner/<id> — correct path is /bookings/owner/<id>
   updateBookingStatus(
     bookingId: string,
     status: 'confirmed' | 'cancelled'
   ): Observable<any> {
     return this.http.patch(
-      `${this.ownerBaseUrl}/owner/${bookingId}`,
+      `${this.bookingBaseUrl}/owner/${bookingId}`,
       { status },
       { headers: this.getAuthHeaders() }
     );
   }
-  getOwnerEarnings() :Observable<{ total_earnings: number}> {
-    return this.http.get<{ total_earnings: number} > (
-      `http://127.0.0.1:5000/owner/earnings`,
-      {headers: this.getAuthHeaders()}
+
+  getOwnerEarnings(): Observable<{ total_earnings: number }> {
+    return this.http.get<{ total_earnings: number }>(
+      `${this.ownerBaseUrl}/earnings`,
+      { headers: this.getAuthHeaders() }
     );
   }
 }
